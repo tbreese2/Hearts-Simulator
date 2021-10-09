@@ -32,8 +32,9 @@ constexpr const char* const Card::SUIT_DIAMONDS;
 
 //EFFECTS Initializes Card to the Two of Spades
 Card::Card()
+    : rank(RANK_TWO), suit(SUIT_SPADES)
 {
-    assert(false);
+
 }
 
 //REQUIRES rank is one of "Two", "Three", "Four", "Five", "Six", "Seven",
@@ -41,14 +42,15 @@ Card::Card()
 //  suit is one of "Spades", "Hearts", "Clubs", "Diamonds"
 //EFFECTS Initializes Card to specified rank and suit
 Card::Card(const std::string &rank_in, const std::string &suit_in)
+    : rank(rank_in), suit(suit_in)
 {
-    assert(false);
+
 }
 
 //EFFECTS Returns the rank
 std::string Card::get_rank() const
 {
-    assert(false);
+    return rank;
 }
 
 //EFFECTS Returns the suit.  Does not consider trump.
@@ -68,7 +70,7 @@ std::string Card::get_suit(const std::string &trump) const
 //EFFECTS Returns true if card is a face card (Jack, Queen, King or Ace)
 bool Card::is_face() const
 {
-    assert(false);
+    return rank == RANK_JACK || rank == RANK_QUEEN || rank == RANK_KING || rank == RANK_ACE;
 }
 
 //REQUIRES trump is a valid suit
