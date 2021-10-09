@@ -54,7 +54,7 @@ std::string Card::get_rank() const
 //EFFECTS Returns the suit.  Does not consider trump.
 std::string Card::get_suit() const
 {
-    assert(false);
+    return suit;
 }
 
 //REQUIRES trump is a valid suit
