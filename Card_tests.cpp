@@ -283,13 +283,13 @@ TEST(test_less_than_basic)
 
 TEST(test_less_than_edge)
 {
-    Card a(Card::RANK_TWO, Card::SUIT_DIAMONDS);
+    Card d(Card::RANK_TWO, Card::SUIT_SPADES);
     for(int s = 0; s < 4; s++)
     {
         for(int r = 0; r < 13; r++)
         {
-            Card c(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
-            ASSERT_EQUAL(true,a<c);
+            Card e(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
+            ASSERT_EQUAL(false,e<d);
         }
     }
 }
@@ -305,7 +305,7 @@ TEST(test_less_than_equal_basic)
     Card d(Card::RANK_THREE, Card::SUIT_CLUBS);
     ASSERT_EQUAL(c<=a, true);
     ASSERT_EQUAL(a<=c, false);
-    ASSERT_EQUAL(a<=a, false);
+    ASSERT_EQUAL(a<=a, true);
     ASSERT_EQUAL(b<=c, false);
     ASSERT_EQUAL(c<=b, true);
     ASSERT_EQUAL(b<=d, true);
@@ -314,16 +314,13 @@ TEST(test_less_than_equal_basic)
 
 TEST(test_less_than_equal_edge)
 {
-    Card a(Card::RANK_TWO, Card::SUIT_DIAMONDS);
+    Card e(Card::RANK_TWO, Card::SUIT_SPADES);
     for(int s = 0; s < 4; s++)
     {
         for(int r = 0; r < 13; r++)
         {
-            Card c(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
-            if (c.get_suit() == Card::RANK_TWO && c.get_rank() == Card::SUIT_DIAMONDS){
-                ASSERT_EQUAL(true, a<=c);
-            } 
-            else ASSERT_EQUAL(true,a<c);
+            Card f(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
+            ASSERT_EQUAL(true, e<=f);
         }
     }
 }
@@ -331,10 +328,64 @@ TEST(test_less_than_equal_edge)
 //test >
 //EFFECTS Returns true if lhs is higher value than rhs.
 //  Does not consider trump.
+TEST(test_greater_than_basic)
+{
+   Card a(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card b(Card::RANK_THREE, Card::SUIT_CLUBS);
+    Card c(Card::RANK_THREE, Card::SUIT_SPADES);
+    Card d(Card::RANK_THREE, Card::SUIT_CLUBS);
+    ASSERT_EQUAL(c>a, false);
+    ASSERT_EQUAL(a>c, true);
+    ASSERT_EQUAL(a>a, false);
+    ASSERT_EQUAL(b>c, true);
+    ASSERT_EQUAL(c>b, false);
+    ASSERT_EQUAL(b>d, false);
+    ASSERT_EQUAL(d>b, false);
+}
+
+TEST(test_greater_than_edge)
+{
+    Card a(Card::RANK_TWO, Card::SUIT_SPADES);
+    for(int s = 0; s < 4; s++)
+    {
+        for(int r = 0; r < 13; r++)
+        {
+            Card c(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
+            ASSERT_EQUAL(false,a>c);
+        }
+    }
+}
 
 //test >=
 //EFFECTS Returns true if lhs is higher value than rhs or the same card as rhs.
 //  Does not consider trump.
+TEST(test_greater_than_equal_basic)
+{
+   Card a(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card b(Card::RANK_THREE, Card::SUIT_CLUBS);
+    Card c(Card::RANK_THREE, Card::SUIT_SPADES);
+    Card d(Card::RANK_THREE, Card::SUIT_CLUBS);
+    ASSERT_EQUAL(c>=a, false);
+    ASSERT_EQUAL(a>=c, true);
+    ASSERT_EQUAL(a>=a, true);
+    ASSERT_EQUAL(b>=c, true);
+    ASSERT_EQUAL(c>=b, false);
+    ASSERT_EQUAL(b>=d, true);
+    ASSERT_EQUAL(d>=b, true);
+}
+
+TEST(test_greater_than_equal_edge)
+{
+    Card a(Card::RANK_ACE, Card::SUIT_DIAMONDS);
+    for(int s = 0; s < 4; s++)
+    {
+        for(int r = 0; r < 13; r++)
+        {
+            Card c(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
+            ASSERT_EQUAL(true,a>=c);
+        }
+    }
+}
 
 //test ==
 //EFFECTS Returns true if lhs is same card as rhs.
