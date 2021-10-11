@@ -28,7 +28,7 @@ constexpr const char* const Card::SUIT_DIAMONDS;
 
 // add your code below
 //card class helper functions
-void Card::check_invariants() const
+void check_invariants(Card &c) 
 {
     bool validSuit = false;
     bool validRank = false;
@@ -36,7 +36,7 @@ void Card::check_invariants() const
     //check if valid suit
     for(int s = 0; s < 4; s++)
     {
-      if (SUIT_NAMES_BY_WEIGHT[s] == suit)
+      if (SUIT_NAMES_BY_WEIGHT[s] == c.get_suit())
       {
         validSuit = true;
       }
@@ -44,7 +44,7 @@ void Card::check_invariants() const
     
     for(int r = 0; r < 13; r++)
     {
-      if (RANK_NAMES_BY_WEIGHT[r])
+      if (RANK_NAMES_BY_WEIGHT[r] == c.get_rank())
       {
         validRank = true;
       }
@@ -55,7 +55,7 @@ void Card::check_invariants() const
 
 //REQUIRES valid suit as input
 //EFFECTS returns next suit
-std::string Card::return_same_color_suit(const std::string &trump) const
+std::string return_same_color_suit(const std::string &trump)
 {
     if (trump == Card::SUIT_CLUBS)
     {
@@ -81,7 +81,7 @@ std::string Card::return_same_color_suit(const std::string &trump) const
 Card::Card()
     : rank(RANK_TWO), suit(SUIT_SPADES)
 {
-    check_invariants();
+    check_invariants(*this);
 }
 
 //REQUIRES rank is one of "Two", "Three", "Four", "Five", "Six", "Seven",
@@ -91,10 +91,10 @@ Card::Card()
 Card::Card(const std::string &rank_in, const std::string &suit_in)
     : rank(rank_in), suit(suit_in)
 {
-    check_invariants();
+    check_invariants(*this);
 }
 
-//EFFECTS Returns the rank
+//EFFECTS Returns the ranks
 std::string Card::get_rank() const
 {
     return rank;
