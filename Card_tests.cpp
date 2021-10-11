@@ -390,10 +390,64 @@ TEST(test_greater_than_equal_edge)
 //test ==
 //EFFECTS Returns true if lhs is same card as rhs.
 //  Does not consider trump.
+TEST(test_equal_basic)
+{
+    Card a(Card::RANK_THREE, Card::SUIT_DIAMONDS);
+    Card b(Card::RANK_THREE, Card::SUIT_CLUBS);
+    Card c(Card::RANK_THREE, Card::SUIT_SPADES);
+    Card d(Card::RANK_THREE, Card::SUIT_HEARTS);
+    Card e(Card::RANK_THREE, Card::SUIT_HEARTS);
+    Card f(Card::RANK_THREE, Card::SUIT_SPADES);
+    ASSERT_EQUAL(a==b, false);
+    ASSERT_EQUAL(b==c, false);
+    ASSERT_EQUAL(c==d, false);
+    ASSERT_EQUAL(d==e, true);
+    ASSERT_EQUAL(c==f, true);
+}
+
+TEST(test_equal_edge)
+{
+    Card a(Card::RANK_ACE, Card::SUIT_DIAMONDS);
+    for(int s = 0; s < 4; s++)
+    {
+        for(int r = 0; r < 13; r++)
+        {
+            Card c(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
+            ASSERT_EQUAL(a==c, (c.get_rank() == Card::RANK_ACE) && (c.get_suit() == Card::SUIT_DIAMONDS));
+        }
+    }
+}
 
 //test != 
 //EFFECTS Returns true if lhs is not the same card as rhs.
 //  Does not consider trump.
+TEST(test_not_equal_basic)
+{
+    Card a(Card::RANK_THREE, Card::SUIT_DIAMONDS);
+    Card b(Card::RANK_THREE, Card::SUIT_CLUBS);
+    Card c(Card::RANK_THREE, Card::SUIT_SPADES);
+    Card d(Card::RANK_THREE, Card::SUIT_HEARTS);
+    Card e(Card::RANK_THREE, Card::SUIT_HEARTS);
+    Card f(Card::RANK_THREE, Card::SUIT_SPADES);
+    ASSERT_EQUAL(a!=b, true);
+    ASSERT_EQUAL(b!=c, true);
+    ASSERT_EQUAL(c!=d, true);
+    ASSERT_EQUAL(d!=e, false);
+    ASSERT_EQUAL(c!=f, false);
+}
+
+TEST(test_not_equal_edge)
+{
+    Card a(Card::RANK_ACE, Card::SUIT_DIAMONDS);
+    for(int s = 0; s < 4; s++)
+    {
+        for(int r = 0; r < 13; r++)
+        {
+            Card c(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
+            ASSERT_EQUAL(a!=c, !((c.get_rank() == Card::RANK_ACE) && (c.get_suit() == Card::SUIT_DIAMONDS)));
+        }
+    }
+}
 
 
 TEST_MAIN()

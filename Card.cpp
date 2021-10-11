@@ -280,14 +280,14 @@ bool operator>=(const Card &lhs, const Card &rhs)
 //  Does not consider trump.
 bool operator==(const Card &lhs, const Card &rhs)
 {
-    assert(false);
+    return (lhs.get_suit() == rhs.get_suit()) && (lhs.get_rank() == rhs.get_rank());
 }
 
 //EFFECTS Returns true if lhs is not the same card as rhs.
 //  Does not consider trump.
 bool operator!=(const Card &lhs, const Card &rhs)
 {
-    assert(false);
+    return !((lhs.get_suit() == rhs.get_suit()) && (lhs.get_rank() == rhs.get_rank()));
 }
 
 //REQUIRES suit is a valid suit
