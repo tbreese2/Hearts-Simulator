@@ -27,9 +27,8 @@ constexpr const char* const Card::SUIT_CLUBS;
 constexpr const char* const Card::SUIT_DIAMONDS;
 
 // add your code below
-
 //card class helper functions
-void Card::checkInvariants() const
+void Card::check_invariants() const
 {
     bool validSuit = false;
     bool validRank = false;
@@ -54,13 +53,35 @@ void Card::checkInvariants() const
     assert(validRank);
 }
 
+//REQUIRES valid suit as input
+//EFFECTS returns next suit
+std::string Card::return_same_color_suit(const std::string &trump) const
+{
+    if (trump == Card::SUIT_CLUBS)
+    {
+        return Card::SUIT_SPADES;
+    } 
+    else if (trump == Card::SUIT_DIAMONDS) 
+    {
+        return Card::SUIT_HEARTS;
+    } 
+    else if (trump == Card::SUIT_SPADES) 
+    {
+        return Card::SUIT_CLUBS;
+    } 
+    else 
+    {
+        return Card::SUIT_DIAMONDS;
+    }
+}
+
 //card class functions
 
 //EFFECTS Initializes Card to the Two of Spades
 Card::Card()
     : rank(RANK_TWO), suit(SUIT_SPADES)
 {
-    checkInvariants();
+    check_invariants();
 }
 
 //REQUIRES rank is one of "Two", "Three", "Four", "Five", "Six", "Seven",
@@ -70,7 +91,7 @@ Card::Card()
 Card::Card(const std::string &rank_in, const std::string &suit_in)
     : rank(rank_in), suit(suit_in)
 {
-    checkInvariants();
+    check_invariants();
 }
 
 //EFFECTS Returns the rank
@@ -113,7 +134,11 @@ bool Card::is_face() const
 //EFFECTS Returns true if card is the Jack of the next suit
 bool Card::is_left_bower(const std::string &trump) const
 {
-    assert(false);
+    std::string next_suit = return_same_color_suit(trump);
+    if (suit == next_suit && rank == Card::RANK_JACK) {
+        return true;
+    }
+    return false;
 }
 
 //REQUIRES trump is a valid suit

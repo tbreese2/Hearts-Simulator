@@ -113,6 +113,10 @@ TEST(test_is_right_bower_basic)
     ASSERT_EQUAL(true, b.is_right_bower(Card::SUIT_DIAMONDS));
     ASSERT_EQUAL(true, c.is_right_bower(Card::SUIT_SPADES));
     ASSERT_EQUAL(true, d.is_right_bower(Card::SUIT_HEARTS));
+    ASSERT_EQUAL(false, a.is_right_bower(Card::SUIT_HEARTS));
+    ASSERT_EQUAL(false, b.is_right_bower(Card::SUIT_CLUBS));
+    ASSERT_EQUAL(false, c.is_right_bower(Card::SUIT_DIAMONDS));
+    ASSERT_EQUAL(false, d.is_right_bower(Card::SUIT_SPADES));
 }
 
 TEST(test_is_right_bower_edge)
@@ -136,6 +140,41 @@ TEST(test_is_right_bower_edge)
 }
 
 //test is left bower
+TEST(test_is_left_bower_basic)
+{
+    Card a(Card::RANK_JACK, Card::SUIT_CLUBS);
+    Card b(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_JACK, Card::SUIT_SPADES);
+    Card d(Card::RANK_JACK, Card::SUIT_HEARTS);
+    ASSERT_EQUAL(true, a.is_left_bower(Card::SUIT_SPADES));
+    ASSERT_EQUAL(true, b.is_left_bower(Card::SUIT_HEARTS));
+    ASSERT_EQUAL(true, c.is_left_bower(Card::SUIT_CLUBS));
+    ASSERT_EQUAL(true, d.is_left_bower(Card::SUIT_DIAMONDS));
+    ASSERT_EQUAL(false, a.is_left_bower(Card::SUIT_CLUBS));
+    ASSERT_EQUAL(false, b.is_left_bower(Card::SUIT_DIAMONDS));
+    ASSERT_EQUAL(false, c.is_left_bower(Card::SUIT_SPADES));
+    ASSERT_EQUAL(false, d.is_left_bower(Card::SUIT_HEARTS));
+}
+
+TEST(test_is_left_bower_edge)
+{
+    //loop through every card
+    //loop through all suits
+    string trumpSuit = Card::SUIT_SPADES;
+    for(int s = 0; s < 4; s++)
+    {
+        for(int r = 0; r < 13; r++)
+        {
+            Card c(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
+            if (c.get_rank() == Card::RANK_JACK && c.get_suit() == Card::SUIT_CLUBS)
+            {
+                ASSERT_EQUAL(true, c.is_left_bower(trumpSuit));
+            } else {
+                ASSERT_EQUAL(false, c.is_left_bower(trumpSuit));
+            }
+        }
+    }
+}
 
 //test is trump
 

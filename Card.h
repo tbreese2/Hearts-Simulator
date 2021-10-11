@@ -77,7 +77,11 @@ private:
   std::string suit;
 
   //helper functions
-  void checkInvariants() const;
+  void check_invariants() const;
+
+  //REQUIRES valid suit as input
+  //EFFECTS returns next suit
+  std::string return_same_color_suit(const std::string &trump) const;
 };
 
 // Suits in order from lowest suit to highest suit.
