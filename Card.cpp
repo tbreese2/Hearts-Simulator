@@ -111,7 +111,11 @@ std::string Card::get_suit() const
 //HINT: the left bower is the trump suit!
 std::string Card::get_suit(const std::string &trump) const
 {
-    assert(false);
+    if (is_left_bower(trump))
+    {
+        return trump;
+    }
+    return suit;
 }
 
 //EFFECTS Returns true if card is a face card (Jack, Queen, King or Ace)
@@ -146,7 +150,10 @@ bool Card::is_left_bower(const std::string &trump) const
 // suit are trump cards.  The left bower is also a trump card.
 bool Card::is_trump(const std::string &trump) const
 {
-    assert(false);
+    if (is_left_bower(trump) || suit == trump) {
+        return true;
+    }
+    return false;
 }
 
 //outside class functions

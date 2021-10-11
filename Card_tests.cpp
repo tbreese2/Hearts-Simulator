@@ -64,6 +64,44 @@ TEST(test_card_get_suit_without_trump_edge)
 }
 
 //test get suit with trump suit
+TEST(test_get_suit_with_trump_basic)
+{
+    Card a(Card::RANK_JACK, Card::SUIT_CLUBS);
+    Card b(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_JACK, Card::SUIT_SPADES);
+    Card d(Card::RANK_JACK, Card::SUIT_HEARTS);
+
+    //test normal functionality with jacks
+    ASSERT_EQUAL(Card::SUIT_CLUBS, a.get_suit(Card::SUIT_CLUBS));
+    ASSERT_EQUAL(Card::SUIT_DIAMONDS, b.get_suit(Card::SUIT_DIAMONDS));
+    ASSERT_EQUAL(Card::SUIT_SPADES, c.get_suit(Card::SUIT_SPADES));
+    ASSERT_EQUAL(Card::SUIT_HEARTS, d.get_suit(Card::SUIT_HEARTS));
+
+    //test left bower functionality with jacks
+    ASSERT_EQUAL(Card::SUIT_SPADES, a.get_suit(Card::SUIT_SPADES));
+    ASSERT_EQUAL(Card::SUIT_HEARTS, b.get_suit(Card::SUIT_HEARTS));
+    ASSERT_EQUAL(Card::SUIT_CLUBS, c.get_suit(Card::SUIT_CLUBS));
+    ASSERT_EQUAL(Card::SUIT_DIAMONDS, d.get_suit(Card::SUIT_DIAMONDS));
+}
+
+TEST(test_get_suit_with_trump_edge)
+{
+    string trumpSuit = Card::SUIT_SPADES;
+    for(int s = 0; s < 4; s++)
+    {
+        for(int r = 0; r < 13; r++)
+        {
+            Card c(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
+            //check if left bower
+            if (c.get_rank() == Card::RANK_JACK && c.is_left_bower(trumpSuit)) 
+            {
+                ASSERT_EQUAL(c.get_suit(trumpSuit), trumpSuit);
+            } else {
+                ASSERT_EQUAL(c.get_suit(trumpSuit), SUIT_NAMES_BY_WEIGHT[s]);
+            }
+        }
+    }
+}
 
 //test is face
 TEST(test_is_face_basic)
@@ -177,5 +215,51 @@ TEST(test_is_left_bower_edge)
 }
 
 //test is trump
+TEST(test_is_trump_basic)
+{
+    //initiilize
+    string trumpSuit = Card::SUIT_SPADES;
+
+    //test if suit is working and bower is working
+    Card a(Card::RANK_JACK, Card::SUIT_CLUBS);
+    Card b(Card::RANK_KING, Card::SUIT_SPADES);
+    Card c(Card::RANK_TWO, Card::SUIT_SPADES);
+    Card d(Card::RANK_NINE, Card::SUIT_SPADES);
+
+    //test all cards in trump suit
+    ASSERT_EQUAL(true, a.is_trump(trumpSuit));
+    ASSERT_EQUAL(true, b.is_trump(trumpSuit));
+    ASSERT_EQUAL(true, c.is_trump(trumpSuit));
+    ASSERT_EQUAL(true, d.is_trump(trumpSuit));
+
+    //test same cards but change suit
+    ASSERT_EQUAL(false, a.is_trump(Card::SUIT_DIAMONDS));
+    ASSERT_EQUAL(false, b.is_trump(Card::SUIT_CLUBS));
+    ASSERT_EQUAL(false, c.is_trump(Card::SUIT_CLUBS));
+    ASSERT_EQUAL(false, d.is_trump(Card::SUIT_CLUBS));
+
+}
+
+//test to make sure rank is working
+TEST(test_is_trump_edge)
+{
+    //loop through every card
+    //loop through all suits
+    string trumpSuit = Card::SUIT_SPADES;
+    for(int s = 0; s < 4; s++)
+    {
+        for(int r = 0; r < 13; r++)
+        {
+            Card c(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
+            //check if trump suit
+            if (c.get_suit() == trumpSuit || c.is_left_bower(trumpSuit))
+            {
+                ASSERT_EQUAL(true, c.is_trump(trumpSuit));
+            } else {
+                ASSERT_EQUAL(false, c.is_trump(trumpSuit));
+            }
+        }
+    }
+}
 
 TEST_MAIN()
