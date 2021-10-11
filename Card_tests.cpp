@@ -117,7 +117,22 @@ TEST(test_is_right_bower_basic)
 
 TEST(test_is_right_bower_edge)
 {
-
+    //loop through every card
+    //loop through all suits
+    string trumpSuit = Card::SUIT_SPADES;
+    for(int s = 0; s < 4; s++)
+    {
+        for(int r = 0; r < 13; r++)
+        {
+            Card c(RANK_NAMES_BY_WEIGHT[r],SUIT_NAMES_BY_WEIGHT[s]);
+            if (c.get_rank() == Card::RANK_JACK && c.get_suit() == trumpSuit)
+            {
+                ASSERT_EQUAL(true, c.is_right_bower(trumpSuit));
+            } else {
+                ASSERT_EQUAL(false, c.is_right_bower(trumpSuit));
+            }
+        }
+    }
 }
 
 //test is left bower

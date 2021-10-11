@@ -75,6 +75,9 @@ public:
 private:
   std::string rank;
   std::string suit;
+
+  //helper functions
+  void checkInvariants() const;
 };
 
 // Suits in order from lowest suit to highest suit.

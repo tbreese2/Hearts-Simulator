@@ -28,13 +28,39 @@ constexpr const char* const Card::SUIT_DIAMONDS;
 
 // add your code below
 
+//card class helper functions
+void Card::checkInvariants() const
+{
+    bool validSuit = false;
+    bool validRank = false;
+
+    //check if valid suit
+    for(int s = 0; s < 4; s++)
+    {
+      if (SUIT_NAMES_BY_WEIGHT[s] == suit)
+      {
+        validSuit = true;
+      }
+    }
+    
+    for(int r = 0; r < 13; r++)
+    {
+      if (RANK_NAMES_BY_WEIGHT[r])
+      {
+        validRank = true;
+      }
+    }
+    assert(validSuit);
+    assert(validRank);
+}
+
 //card class functions
 
 //EFFECTS Initializes Card to the Two of Spades
 Card::Card()
     : rank(RANK_TWO), suit(SUIT_SPADES)
 {
-
+    checkInvariants();
 }
 
 //REQUIRES rank is one of "Two", "Three", "Four", "Five", "Six", "Seven",
@@ -44,7 +70,7 @@ Card::Card()
 Card::Card(const std::string &rank_in, const std::string &suit_in)
     : rank(rank_in), suit(suit_in)
 {
-
+    checkInvariants();
 }
 
 //EFFECTS Returns the rank
@@ -77,7 +103,10 @@ bool Card::is_face() const
 //EFFECTS Returns true if card is the Jack of the trump suit
  bool Card::is_right_bower(const std::string &trump) const
 {
-    assert(false);
+    if (suit == trump && rank == Card::RANK_JACK) {
+        return true;
+    }
+    return false;
 }
 
 //REQUIRES trump is a valid suit
