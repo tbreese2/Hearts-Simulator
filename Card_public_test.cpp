@@ -56,4 +56,5 @@ TEST(test_card_insertion) {
     ASSERT_EQUAL(oss.str(), "Three of Spades");
 }
 
+
 TEST_MAIN()
