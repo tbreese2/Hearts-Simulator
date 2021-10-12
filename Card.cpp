@@ -300,15 +300,35 @@ std::string Suit_next(const std::string &suit)
 //EFFECTS Prints Card to stream, for example "Two of Spades"
 std::ostream & operator<<(std::ostream &os, const Card &card)
 {
-    assert(false);
+    os << card.get_rank() << " of " << card.get_suit();
+    return os;
 }
 
 //REQUIRES trump is a valid suit
 //EFFECTS Returns true if a is lower value than b.  Uses trump to determine
 // order, as described in the spec.
-bool Card_less(const Card &a, const Card &b, const std::string &trump)
-{
-    assert(false);
+bool Card_less(const Card &a, const Card &b, const std::string &trump) {
+    int rank_lhs = 0, rank_rhs = 0, suit_lhs = 0, suit_rhs = 0;
+    for (int r = 0; r < 13; r++) {
+        if (a.get_rank() == RANK_NAMES_BY_WEIGHT[r]) rank_lhs += r;
+        if (b.get_rank() == RANK_NAMES_BY_WEIGHT[r]) rank_rhs += r;
+        if (a.is_trump(trump)) rank_lhs += 14;
+        if (b.is_trump(trump)) rank_rhs += 14;
+        if (a.is_right_bower(trump)) rank_lhs += 14;
+        if (b.is_right_bower(trump)) rank_rhs += 14;
+        if (a.is_left_bower(trump)) rank_lhs += 13;
+        if (b.is_left_bower(trump)) rank_rhs += 13;
+    }
+    if (rank_rhs == rank_lhs) {
+        for (int s = 0; s < 4; s++) {
+            if (a.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) suit_lhs = s;
+            if (b.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) suit_rhs = s;
+        }
+        if (suit_lhs < suit_rhs) return true;
+        return false;
+    }
+    if (rank_lhs < rank_rhs) return true;
+    return false;
 }
 
 //REQUIRES trump is a valid suit
@@ -317,7 +337,29 @@ bool Card_less(const Card &a, const Card &b, const std::string &trump)
 bool Card_less(const Card &a, const Card &b, const Card &led_card,
                const std::string &trump)
 {
-    assert(false);
+    int rank_lhs = 0, rank_rhs = 0, suit_lhs = 0, suit_rhs = 0;
+    for (int r = 0; r < 13; r++) {
+        if (a.get_rank() == RANK_NAMES_BY_WEIGHT[r]) rank_lhs += r;
+        if (b.get_rank() == RANK_NAMES_BY_WEIGHT[r]) rank_rhs += r;
+        if (a.is_trump(trump)) rank_lhs += 27;
+        if (b.is_trump(trump)) rank_rhs += 27;
+        if (a.is_right_bower(trump)) rank_lhs += 14;
+        if (b.is_right_bower(trump)) rank_rhs += 14;
+        if (a.is_left_bower(trump)) rank_lhs += 13;
+        if (b.is_left_bower(trump)) rank_rhs += 13;
+        if (a.get_suit() == led_card.get_suit()) rank_lhs += 13;
+        if (b.get_suit() == led_card.get_suit()) rank_rhs += 13;
+    }
+    if (rank_rhs == rank_lhs) {
+        for (int s = 0; s < 4; s++) {
+            if (a.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) suit_lhs = s;
+            if (b.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) suit_rhs = s;
+        }
+        if (suit_lhs < suit_rhs) return true;
+        return false;
+    }
+    if (rank_lhs < rank_rhs) return true;
+    return false;
 }   
 
 

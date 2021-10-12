@@ -460,5 +460,86 @@ TEST(test_next_suit_basic)
     ASSERT_EQUAL(Suit_next(Card::SUIT_SPADES), Card::SUIT_CLUBS);
 }
 
+//test print
+//EFFECTS Prints Card to stream, for example "Two of Spades"
+TEST(test_print_basic)
+{
+    Card three_spades = Card(Card::RANK_TEN, Card::SUIT_SPADES);
+    ostringstream oss;
+    oss << three_spades;
+    ASSERT_EQUAL(oss.str(), "Ten of Spades");
+}
+
+TEST(test_print_edge)
+{
+    Card three_spades = Card(Card::RANK_ACE, Card::SUIT_HEARTS);
+    ostringstream oss;
+    oss << three_spades;
+    ASSERT_EQUAL(oss.str(), "Ace of Hearts");
+}
+
+//test card less
+//EFFECTS Returns true if a is lower value than b.  Uses trump to determine
+// order, as described in the spec.
+TEST(test_card_less_basic)
+{
+    string trumpSuit = Card::SUIT_HEARTS;
+    Card a = Card(Card::RANK_JACK, Card::SUIT_HEARTS);
+    Card b = Card(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card c = Card(Card::RANK_THREE, Card::SUIT_DIAMONDS);
+    Card d = Card(Card::RANK_ACE, Card::SUIT_SPADES);
+    ASSERT_EQUAL(Card_less(a,b,trumpSuit), false);
+    ASSERT_EQUAL(Card_less(b,a,trumpSuit), true);
+    ASSERT_EQUAL(Card_less(b,c,trumpSuit), false);
+    ASSERT_EQUAL(Card_less(c,b,trumpSuit), true);
+    ASSERT_EQUAL(Card_less(a,d,trumpSuit), false);
+}
+
+TEST(test_card_less_edge)
+{
+    string trumpSuit = Card::SUIT_HEARTS;
+    Card a = Card(Card::RANK_ACE, Card::SUIT_CLUBS);
+    Card b = Card(Card::RANK_JACK, Card::SUIT_CLUBS);
+    Card c = Card(Card::RANK_THREE, Card::SUIT_SPADES);
+    ASSERT_EQUAL(Card_less(a,b,trumpSuit), false);
+    ASSERT_EQUAL(Card_less(b,a,trumpSuit), true);
+    ASSERT_EQUAL(Card_less(b,c,trumpSuit), false);
+    ASSERT_EQUAL(Card_less(c,b,trumpSuit), true);
+}
+
+//test card less led
+//REQUIRES trump is a valid suit
+//EFFECTS Returns true if a is lower value than b.  Uses both the trump suit
+//  and the suit led to determine order, as described in the spec.
+TEST(test_card_less_led_basic)
+{
+    std::string trumpSuit = Card::SUIT_HEARTS;
+    Card ledSuit = Card(Card::RANK_THREE, Card::SUIT_CLUBS);
+    Card a = Card(Card::RANK_JACK, Card::SUIT_HEARTS);
+    Card b = Card(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card c = Card(Card::RANK_THREE, Card::SUIT_DIAMONDS);
+    Card d = Card(Card::RANK_ACE, Card::SUIT_SPADES);
+    Card e = Card(Card::RANK_TWO, Card::SUIT_CLUBS);
+    ASSERT_EQUAL(Card_less(a,b,ledSuit,trumpSuit), false);
+    ASSERT_EQUAL(Card_less(b,a,ledSuit,trumpSuit), true);
+    ASSERT_EQUAL(Card_less(b,c,ledSuit,trumpSuit), false);
+    ASSERT_EQUAL(Card_less(c,b,ledSuit,trumpSuit), true);
+    ASSERT_EQUAL(Card_less(a,d,ledSuit,trumpSuit), false);
+    ASSERT_EQUAL(Card_less(d,e,ledSuit,trumpSuit), true);
+    ASSERT_EQUAL(Card_less(e,d,ledSuit,trumpSuit), false);
+}
+
+TEST(test_card_less_led_edge)
+{
+    string trumpSuit = Card::SUIT_HEARTS;
+    Card ledSuit = Card(Card::RANK_THREE, Card::SUIT_SPADES);
+    Card a = Card(Card::RANK_ACE, Card::SUIT_CLUBS);
+    Card b = Card(Card::RANK_JACK, Card::SUIT_CLUBS);
+    Card c = Card(Card::RANK_THREE, Card::SUIT_SPADES);
+    ASSERT_EQUAL(Card_less(a,b,ledSuit,trumpSuit), false);
+    ASSERT_EQUAL(Card_less(b,a,ledSuit,trumpSuit), true);
+    ASSERT_EQUAL(Card_less(b,c,ledSuit,trumpSuit), true);
+    ASSERT_EQUAL(Card_less(c,b,ledSuit,trumpSuit), false);
+}
 
 TEST_MAIN()
