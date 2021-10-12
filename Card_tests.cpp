@@ -449,5 +449,16 @@ TEST(test_not_equal_edge)
     }
 }
 
+//next suit tests
+//REQUIRES suit is a valid suit
+//EFFECTS returns the next suit, which is the suit of the same color
+TEST(test_next_suit_basic)
+{
+    ASSERT_EQUAL(Suit_next(Card::SUIT_CLUBS), Card::SUIT_SPADES);
+    ASSERT_EQUAL(Suit_next(Card::SUIT_DIAMONDS), Card::SUIT_HEARTS);
+    ASSERT_EQUAL(Suit_next(Card::SUIT_HEARTS), Card::SUIT_DIAMONDS);
+    ASSERT_EQUAL(Suit_next(Card::SUIT_SPADES), Card::SUIT_CLUBS);
+}
+
 
 TEST_MAIN()

@@ -294,7 +294,7 @@ bool operator!=(const Card &lhs, const Card &rhs)
 //EFFECTS returns the next suit, which is the suit of the same color
 std::string Suit_next(const std::string &suit)
 {
-    assert(false);
+    return return_same_color_suit(suit);
 }
 
 //EFFECTS Prints Card to stream, for example "Two of Spades"
