@@ -12,8 +12,14 @@
 // NOTE: Do NOT use pack.in in your implementation of this function
 Pack::Pack()
 {
-    assert(false);
-    assert(next); // DELETEME: avoid error "private field is not used"
+    int i = 0;
+    for (int s = 0; s < 4; s++) {
+        for (int r = 7; r < 13; r++){
+            cards[i] = Card(RANK_NAMES_BY_WEIGHT[r], SUIT_NAMES_BY_WEIGHT[s]);
+            i++;
+        }
+    }
+    next = 0;
 }
 
 // REQUIRES: pack_input contains a representation of a Pack in the
@@ -22,8 +28,15 @@ Pack::Pack()
 // EFFECTS: Initializes Pack by reading from pack_input.
 Pack::Pack(std::istream& pack_input)
 {
-    assert(false);
-    assert(next); // DELETEME: avoid error "private field is not used"
+    int i = 0;
+    std::string rank, suit;
+    while(pack_input >> rank){
+        pack_input >> suit;
+        pack_input >> suit;
+        cards[i] = Card(rank,suit);
+        i++;
+    }
+    next = 0;
 }
 
 
@@ -31,15 +44,15 @@ Pack::Pack(std::istream& pack_input)
 // EFFECTS: Returns the next card in the pack and increments the next index
 Card Pack::deal_one()
 {
-    assert(false);
-    assert(next); // DELETEME: avoid error "private field is not used"
+    Card return_Card = cards[next];
+    next++;
+    return return_Card;
 }
 
 // EFFECTS: Resets next index to first card in the Pack
 void Pack::reset()
 {
-    assert(false);
-    assert(next); // DELETEME: avoid error "private field is not used"
+    next = 0;
 }
 
 // EFFECTS: Shuffles the Pack and resets the next index. This
@@ -47,8 +60,22 @@ void Pack::reset()
 //          https://en.wikipedia.org/wiki/In_shuffle.
 void Pack::shuffle()
 {
-    assert(false);
-    assert(next); // DELETEME: avoid error "private field is not used"
+    for(int i = 0; i < 7; i++) {
+        std::array<Card, PACK_SIZE> cardsShuffled = cards;
+        int i1 = 0;
+        int i2 = 12;
+        int index = 0;
+        while(i2 < 24) {
+            cardsShuffled[index] = cards[i2];
+            index++;
+            cardsShuffled[index] = cards[i1];
+            index++;
+            i1++;
+            i2++;
+        }
+        
+    }
+    next = 0;
 }
 
 // EFFECTS: returns true if there are no more cards left in the pack
