@@ -54,7 +54,7 @@ TEST(test_pack_input_ctor_edge) {
 //reset
 //i don't think I need to test this, but I will
 TEST(test_reset_basic) {
-std::istringstream fin;
+    std::istringstream fin;
     fin.str("Jack of Clubs\nAce of Spades");
     Pack p(fin);
     ASSERT_EQUAL(p.deal_one(), Card(Card::RANK_JACK,Card::SUIT_CLUBS));
@@ -62,4 +62,29 @@ std::istringstream fin;
     p.reset();
     ASSERT_EQUAL(p.deal_one(), Card(Card::RANK_JACK,Card::SUIT_CLUBS));
 }
+
+//test shuffle
+TEST(test_shuffle_basic) {
+    std::ifstream fin;
+    fin.open("test.in");
+    Pack p;
+    p.shuffle();
+    Pack pt(fin);
+    for(int i = 0; i < 24; i++) {
+        ASSERT_EQUAL(pt.deal_one(), p.deal_one());
+    }
+}
+
+//test pack empty
+TEST(pack_empty_basic) {
+Pack pack;
+  for (int i = 0; i < 24 - 1; ++i) {
+    pack.deal_one();
+    ASSERT_FALSE(pack.empty());
+  }
+  pack.deal_one();
+  ASSERT_TRUE(pack.empty());
+}
+
+
 TEST_MAIN()

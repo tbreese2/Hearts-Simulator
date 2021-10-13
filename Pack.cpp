@@ -60,7 +60,7 @@ void Pack::reset()
 //          https://en.wikipedia.org/wiki/In_shuffle.
 void Pack::shuffle()
 {
-    for(int i = 0; i < 7; i++) {
+    for(int i = 0; i < 7; i++){
         std::array<Card, PACK_SIZE> cardsShuffled = cards;
         int i1 = 0;
         int i2 = 12;
@@ -73,13 +73,13 @@ void Pack::shuffle()
             i1++;
             i2++;
         }
-        
+        next = 0;
+        cards = cardsShuffled;
     }
-    next = 0;
 }
 
 // EFFECTS: returns true if there are no more cards left in the pack
 bool Pack::empty() const
 {
-    assert(false);
+    return next >= PACK_SIZE;
 }
