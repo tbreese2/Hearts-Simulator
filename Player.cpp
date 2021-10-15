@@ -4,8 +4,20 @@
 #include <cassert>
 #include <iostream>
 #include <string>
-#include <array>
+#include <vector>
 #include "Player.h"
+
+//helper funciton
+std::string lowest_possible_rank(std::string led)
+{
+  for (int i = 0; i < 4; i++) {
+    if (SUIT_NAMES_BY_WEIGHT[i] != led) {
+      return SUIT_NAMES_BY_WEIGHT[i];
+    }
+  }
+  std::string s;
+  return s;
+}
 
 //object declarations
 //two types of players: a human, and a computer
@@ -51,8 +63,7 @@ public:
   static const int MAX_HAND_SIZE = 5;
 private:
   std::string name;
-  std::array<Card, MAX_HAND_SIZE> cards;
-  int lastCard;
+  std::vector<Card> cards;
 };
 
 class Human : public Player
@@ -92,8 +103,7 @@ public:
   static const int MAX_HAND_SIZE = 5;
 private:
   std::string name;
-  std::array<Card, MAX_HAND_SIZE> cards;
-  int lastCard;
+  std::vector<Card> cards;
 };
 
 //next we will define functions for each type of player
@@ -102,7 +112,7 @@ private:
 //REQUIRES string is valid
 //EFFECTS sets players name
 Simple::Simple(std::string name_in)
-    : name(name_in), lastCard(0)
+    : name(name_in)
 {
 }
 
@@ -117,8 +127,7 @@ const std::string & Simple::get_name() const
 //EFFECTS  adds Card c to Player's hand
 void Simple::add_card(const Card &c)
 {
-  cards[lastCard] = c;
-  lastCard++;
+  cards.push_back(c);
 }
 
 //REQUIRES round is 1 or 2
@@ -137,7 +146,16 @@ bool Simple::make_trump(const Card &upcard, bool is_dealer,
 //EFFECTS  Player adds one card to hand and removes one card from hand.
 void Simple::add_and_discard(const Card &upcard)
 {
-  assert(false);
+  cards.push_back(upcard);
+  int lowestIndex = 0;
+  Card c = cards[lowestIndex];
+  for (size_t i = 1; i < cards.size(); i++) {
+    if (cards[i]<c) {
+      c = cards[i];
+      lowestIndex = i;
+    }
+  }
+  cards.erase(cards.begin()+lowestIndex);
 }
 
 //REQUIRES Player has at least one card, trump is a valid suit
@@ -146,15 +164,64 @@ void Simple::add_and_discard(const Card &upcard)
 //  is removed the player's hand.
 Card Simple::lead_card(const std::string &trump)
 {
-  assert(false);
+  Card c = Card(Card::RANK_TWO,lowest_possible_rank(trump));
+  int cardIndex = -1;
+  for (size_t i = 0; i < cards.size(); i++) {
+    if (!cards[i].is_trump(trump) && cards[i]>=c)
+    {
+      c = cards[i]; 
+      cardIndex = i;
+    }
+  }
+  if (cardIndex == -1) {
+    c = Card(Card::RANK_TWO,trump);
+    for (size_t i = 0; i < cards.size(); i++) {
+      if (!Card_less(cards[i],c,trump))
+      {
+        c = cards[i]; 
+        cardIndex = i;
+      }
+    }
+    cards.erase(cards.begin()+cardIndex);
+    return c;
+  }
+  cards.erase(cards.begin()+cardIndex);
+  return c;
 }
 
 //REQUIRES Player has at least one card, trump is a valid suit
 //EFFECTS  Plays one Card from Player's hand according to their strategy.
 //  The card is removed from the player's hand.
-Card Simple::play_card(const Card &led_card, const std::string &trump)
-{
-  assert(false);
+Card Simple::play_card(const Card &led_card, const std::string &trump) {
+  int lowestIndex = -1;
+  Card c = Card(Card::RANK_TWO,led_card.get_suit());
+  for (size_t i = 0; i < cards.size(); i++) {
+    if (led_card.get_suit() == trump) {
+      if (!Card_less(cards[i],c,trump) && (cards[i].get_suit() == led_card.get_suit() || cards[i].is_left_bower(trump))) {
+        c = cards[i];
+        lowestIndex = i;
+      }
+    } else if (Suit_next(led_card.get_suit()) == trump && cards[i].get_suit() == led_card.get_suit()) {
+      if (cards[i]>=c && !cards[i].is_left_bower(trump)) { c = cards[i]; lowestIndex = i; }
+    } else if (cards[i].get_suit() == led_card.get_suit()){
+      if (cards[i]>=c) { c = cards[i]; lowestIndex = i;}
+    }
+  }
+  if (lowestIndex != -1) { cards.erase(cards.begin()+lowestIndex); return c; }
+  else if (c.get_suit() == led_card.get_suit() && lowestIndex != -1) { 
+    cards.erase(cards.begin()+lowestIndex); 
+    return c; 
+  }
+  c = Card(Card::RANK_ACE,Card::SUIT_DIAMONDS);
+  lowestIndex = 0;
+  for (size_t i = 0; i < cards.size(); i++) {
+    if (cards[i]<=c) {
+      c = cards[i];
+      lowestIndex = i;
+    }
+  }
+  cards.erase(cards.begin()+lowestIndex);
+  return c;
 }
 
 //nest the human functions
