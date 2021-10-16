@@ -179,7 +179,7 @@ void Simple::add_and_discard(const Card &upcard)
   int lowestIndex = 0;
   Card c = cards[lowestIndex];
   for (size_t i = 0; i < cards.size(); i++) {
-    if (cards[i]<=c) {
+    if (!Card_less(c,cards[i],upcard.get_suit())) {
       c = cards[i];
       lowestIndex = i;
     }
