@@ -38,6 +38,8 @@ TEST(test_simple_add_card_basic) {
     Card c(Card::RANK_JACK,Card::SUIT_HEARTS);
     alice->add_card(c);
     ASSERT_EQUAL(alice->play_card(c,Card::SUIT_CLUBS), c);
+
+    delete alice;
 }
 
 TEST(test_simple_add_card_edge) {
@@ -49,6 +51,8 @@ TEST(test_simple_add_card_edge) {
     ASSERT_EQUAL(alice->play_card(c,Card::SUIT_CLUBS), d);
     alice->add_card(c);
     ASSERT_NOT_EQUAL(alice->play_card(c,Card::SUIT_CLUBS), d);
+
+    delete alice;
 }
 
 //test make trump
@@ -68,6 +72,8 @@ TEST(test_simple_make_trump_basic) {
     alice->add_card(e);
     ASSERT_EQUAL(alice->make_trump(up,true,1,trump),true);
     ASSERT_EQUAL(trump,Card::SUIT_DIAMONDS);
+
+    delete alice;
 }
 
 TEST(test_simple_make_trump_basic2) {
@@ -85,6 +91,8 @@ TEST(test_simple_make_trump_basic2) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->make_trump(up,true,1,trump),false)
+
+    delete alice;
 }
 
 TEST(test_simple_make_trump_edge) {
@@ -106,6 +114,8 @@ TEST(test_simple_make_trump_edge) {
     ASSERT_EQUAL(alice->make_trump(up,false,2,trump),true);
     ASSERT_EQUAL(trump,Card::SUIT_DIAMONDS);
     ASSERT_EQUAL(alice->make_trump(up2,false,2,trump2),false);
+
+    delete alice;
 }
 
 TEST(test_simple_make_trump_edge2) {
@@ -128,6 +138,8 @@ TEST(test_simple_make_trump_edge2) {
     ASSERT_EQUAL(trump,Card::SUIT_DIAMONDS);
     ASSERT_EQUAL(alice->make_trump(up2,true,2,trump2),true);
     ASSERT_EQUAL(trump2,Card::SUIT_HEARTS);
+
+    delete alice;
 }
 
 //test lead card
@@ -145,6 +157,8 @@ TEST(test_simple_card_basic) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->lead_card(trump),a);
+
+    delete alice;
 }
 
 TEST(test_simple_card_basic2) {
@@ -161,6 +175,8 @@ TEST(test_simple_card_basic2) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->lead_card(trump),e);
+
+    delete alice;
 }
 
 TEST(test_simple_card_edge) {
@@ -177,6 +193,8 @@ TEST(test_simple_card_edge) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->lead_card(trump),b);
+
+    delete alice;
 }
 
 TEST(test_simple_card_edge2) {
@@ -193,6 +211,8 @@ TEST(test_simple_card_edge2) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->lead_card(trump),e);
+
+    delete alice;
 }
 
 //test play card
@@ -211,6 +231,8 @@ TEST(test_simple_card_basic12) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->play_card(led,trump), c);
+
+    delete alice;
 }
 
 TEST(test_simple_card_basic22) {
@@ -228,6 +250,8 @@ TEST(test_simple_card_basic22) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->play_card(led,trump), a);
+
+    delete alice;
 }
 
 TEST(test_simple_card_basic33) {
@@ -245,6 +269,8 @@ TEST(test_simple_card_basic33) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->play_card(led,trump), a);
+
+    delete alice;
 }
 
 TEST(test_simple_card_basic4) {
@@ -262,6 +288,8 @@ TEST(test_simple_card_basic4) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->play_card(led,trump), c);
+
+    delete alice;
 }
 
 TEST(test_simple_card_basic5) {
@@ -279,6 +307,8 @@ TEST(test_simple_card_basic5) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->play_card(led,trump), a);
+
+    delete alice;
 }
 
 TEST(test_simple_card_basic6) {
@@ -296,6 +326,8 @@ TEST(test_simple_card_basic6) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->play_card(led,trump), b);
+
+    delete alice;
 }
 
 TEST(test_simple_card_basic7) {
@@ -313,6 +345,8 @@ TEST(test_simple_card_basic7) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->play_card(led,trump), c);
+
+    delete alice;
 }
 
 TEST(test_simple_card_basic8) {
@@ -330,6 +364,8 @@ TEST(test_simple_card_basic8) {
     alice->add_card(d);
     alice->add_card(e);
     ASSERT_EQUAL(alice->play_card(led,trump), a);
+
+    delete alice;
 }
 
 TEST(test_simple_card_basic9) {
@@ -346,6 +382,8 @@ TEST(test_simple_card_basic9) {
     alice->add_card(c);
     alice->add_card(d);
     ASSERT_EQUAL(alice->play_card(led,trump), a);
+
+    delete alice;
 }
 
 
