@@ -414,6 +414,69 @@ TEST(test_simple_card_basic9) {
     delete alice;
 }
 
+//test human functions
+//test simple ctor
+TEST(test_human_ctor_basic) {
+    Player * alice = Player_factory("Alice", "Human");
+    ASSERT_EQUAL("Alice", alice->get_name());
+
+    delete alice;
+}
+
+//test simple get name
+TEST(test_human_get_name_basic) {
+    Player * alice = Player_factory("Alice", "Human");
+    ASSERT_EQUAL("Alice", alice->get_name());
+
+    delete alice;
+}
+
+//test make trump
+TEST(test_human_make_trump_basic) {
+    Player * alice = Player_factory("Alice", "Human");
+    std::string s;
+    Card led = Card(Card::RANK_EIGHT, Card::SUIT_SPADES);
+    Card a(Card::RANK_TWO,Card::SUIT_HEARTS);
+    Card b(Card::RANK_JACK,Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card d(Card::RANK_FOUR, Card::SUIT_HEARTS);
+    Card e(Card::RANK_TWO,Card::SUIT_DIAMONDS);
+    alice->add_card(a);
+    alice->add_card(b);
+    alice->add_card(c);
+    alice->add_card(d);
+    alice->add_card(e);
+    alice->make_trump(led,false,1,s);
+
+    delete alice;
+}
+
+//test outside functions
+//test <<
+TEST(test_player_print) {
+    // Create a Human player
+  Player * human = Player_factory("NotRobot", "Human");
+
+  // Print the player using the stream insertion operator
+  ostringstream oss1;
+  oss1 << * human;
+
+  // Verify that the output is the player's name
+  ASSERT_EQUAL(oss1.str(), "NotRobot");
+
+  // Create a Simple player
+  Player * alice = Player_factory("Alice", "Simple");
+
+  // Print the player using the stream insertion operator
+  ostringstream oss2;
+  oss2 << *alice;
+  ASSERT_EQUAL(oss2.str(), "Alice");
+
+  // Clean up players that were created using Player_factory()
+  delete human;
+  delete alice;
+}
+
 
 
 TEST_MAIN()

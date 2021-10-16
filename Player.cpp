@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 #include "Player.h"
 
 //helper funciton
@@ -69,6 +70,7 @@ private:
 class Human : public Player
 {
 public:
+  Human(std::string name_in);
  //EFFECTS returns player's name
   const std::string & get_name() const;
 
@@ -252,7 +254,84 @@ Card Simple::play_card(const Card &led_card, const std::string &trump) {
 }
 
 //nest the human functions
+//REQUIRES string is valid
+//EFFECTS sets players name
+Human::Human(std::string name_in)
+    : name(name_in)
+{
+}
 
+//EFFECTS returns player's name
+const std::string & Human::get_name() const
+{
+  return name;
+}
+
+
+//REQUIRES player has less than MAX_HAND_SIZE cards
+//EFFECTS  adds Card c to Player's hand
+void Human::add_card(const Card &c)
+{
+  cards.push_back(c);
+}
+
+//REQUIRES round is 1 or 2
+//MODIFIES order_up_suit
+//EFFECTS If Player wishes to order up a trump suit then return true and
+//  change order_up_suit to desired suit.  If Player wishes to pass, then do
+//  not modify order_up_suit and return false.
+bool Human::make_trump(const Card &upcard, bool is_dealer,
+                          int round, std::string &order_up_suit) const
+{
+  std::cout << "Human player " << name <<", please enter a suit, or \"pass\":" << std::endl;
+  std::string input;
+  std::cin >> input;
+  if (input == "pass") {
+    return false;
+  }
+  order_up_suit = input;
+  return true;
+}
+
+//REQUIRES Player has at least one card
+//EFFECTS  Player adds one card to hand and removes one card from hand.
+void Human::add_and_discard(const Card &upcard)
+{
+  std::cout << "Human player " << name <<", please select a card:" << std::endl;
+  std::string input;
+  std::cin >> input;
+  if (stoi(input) == -1) {
+  } else {
+    cards.push_back(upcard);
+    cards.erase(cards.begin()+stoi(input));
+  }
+}
+
+//REQUIRES Player has at least one card, trump is a valid suit
+//EFFECTS  Leads one Card from Player's hand according to their strategy
+//  "Lead" means to play the first Card in a trick.  The card
+//  is removed the player's hand.
+Card Human::lead_card(const std::string &trump)
+{
+  std::cout << "Human player " << name <<", please select a card:" << std::endl;
+  std::string input;
+  std::cin >> input;
+  Card temp = cards[stoi(input)];
+  cards.erase(cards.begin()+stoi(input));
+  return temp;
+}
+
+//REQUIRES Player has at least one card, trump is a valid suit
+//EFFECTS  Plays one Card from Player's hand according to their strategy.
+//  The card is removed from the player's hand.
+Card Human::play_card(const Card &led_card, const std::string &trump) {
+  std::cout << "Human player " << name <<", please select a card:" << std::endl;
+  std::string input;
+  std::cin >> input;
+  Card temp = cards[stoi(input)];
+  cards.erase(cards.begin()+stoi(input));
+  return temp;
+}
 
 
 
@@ -264,11 +343,16 @@ Card Simple::play_card(const Card &led_card, const std::string &trump) {
 //Don't forget to call "delete" on each Player* after the game is over
 Player * Player_factory(const std::string &name, const std::string &strategy) {
   if (strategy == "Human") {
-    //return new Human(name);
-  }
+    return new Human(name);
+  } else if (strategy == "Simple") {
    return new Simple(name);
+  }
+  // Invalid strategy if we get here
+  assert(false);
+  return nullptr;
 }
 
 std::ostream & operator<<(std::ostream &os, const Player &p) {
-  assert(false);
+  os << p.get_name();
+  return os;
 }
