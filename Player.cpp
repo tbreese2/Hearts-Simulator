@@ -138,8 +138,29 @@ void Simple::add_card(const Card &c)
 bool Simple::make_trump(const Card &upcard, bool is_dealer,
                           int round, std::string &order_up_suit) const
 {
-  assert(false);
-  return 0;
+  int trumpCardsInHand = 0;
+  for (size_t i = 0; i < cards.size(); i++) {
+    if (cards[i].is_trump(upcard.get_suit()) && cards[i].is_face()) {
+      trumpCardsInHand++;
+    }
+  }
+  if (round == 1)
+  {
+    if (trumpCardsInHand > 1) {
+      order_up_suit = upcard.get_suit();
+      return true;
+    }
+    return false;
+  }
+  if (is_dealer) {
+    order_up_suit = upcard.get_suit();
+    return true;
+  }
+  if (trumpCardsInHand > 0){
+    order_up_suit = upcard.get_suit();
+    return true;
+  }
+  return false;
 }
 
 //REQUIRES Player has at least one card
@@ -149,8 +170,8 @@ void Simple::add_and_discard(const Card &upcard)
   cards.push_back(upcard);
   int lowestIndex = 0;
   Card c = cards[lowestIndex];
-  for (size_t i = 1; i < cards.size(); i++) {
-    if (cards[i]<c) {
+  for (size_t i = 0; i < cards.size(); i++) {
+    if (cards[i]<=c) {
       c = cards[i];
       lowestIndex = i;
     }

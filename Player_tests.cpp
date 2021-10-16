@@ -7,7 +7,7 @@
 
 using namespace std;
 
-TEST(test_player_get_name) {
+TEST(test_simple_get_name) {
     Player * alice = Player_factory("Alice", "Simple");
     ASSERT_EQUAL("Alice", alice->get_name());
 
@@ -17,14 +17,6 @@ TEST(test_player_get_name) {
 // Add more tests here
 //simple tests
 //test simple ctor
-TEST(test_player_get_name_basic) {
-    Player * alice = Player_factory("Alice", "Simple");
-    ASSERT_EQUAL("Alice", alice->get_name());
-
-    delete alice;
-}
-
-//test simple get name
 TEST(test_simple_get_name_basic) {
     Player * alice = Player_factory("Alice", "Simple");
     ASSERT_EQUAL("Alice", alice->get_name());
@@ -32,70 +24,14 @@ TEST(test_simple_get_name_basic) {
     delete alice;
 }
 
-//test lead card
-TEST(test_lead_card_basic) {
+//test simple get name
+TEST(test_simple_get_name_basic2) {
     Player * alice = Player_factory("Alice", "Simple");
-    std::string trump = Card::SUIT_DIAMONDS;
-    Card a(Card::RANK_TWO,Card::SUIT_CLUBS);
-    Card b(Card::RANK_JACK, Card::SUIT_DIAMONDS);
-    Card c(Card::RANK_TWO,Card::SUIT_HEARTS);
-    Card d(Card::RANK_FOUR, Card::SUIT_DIAMONDS);
-    Card e(Card::RANK_TWO,Card::SUIT_HEARTS);
-    alice->add_card(a);
-    alice->add_card(b);
-    alice->add_card(c);
-    alice->add_card(d);
-    alice->add_card(e);
-    ASSERT_EQUAL(alice->lead_card(trump),a);
+    ASSERT_EQUAL("Alice", alice->get_name());
+
+    delete alice;
 }
 
-TEST(test_lead_card_basic2) {
-    Player * alice = Player_factory("Alice", "Simple");
-    std::string trump = Card::SUIT_DIAMONDS;
-    Card a(Card::RANK_TWO,Card::SUIT_DIAMONDS);
-    Card b(Card::RANK_ACE, Card::SUIT_DIAMONDS);
-    Card c(Card::RANK_TWO,Card::SUIT_DIAMONDS);
-    Card d(Card::RANK_FOUR, Card::SUIT_DIAMONDS);
-    Card e(Card::RANK_JACK,Card::SUIT_HEARTS);
-    alice->add_card(a);
-    alice->add_card(b);
-    alice->add_card(c);
-    alice->add_card(d);
-    alice->add_card(e);
-    ASSERT_EQUAL(alice->lead_card(trump),e);
-}
-
-TEST(test_lead_card_edge) {
-    Player * alice = Player_factory("Alice", "Simple");
-    std::string trump = Card::SUIT_DIAMONDS;
-    Card a(Card::RANK_TWO,Card::SUIT_DIAMONDS);
-    Card b(Card::RANK_JACK, Card::SUIT_DIAMONDS);
-    Card c(Card::RANK_TWO,Card::SUIT_DIAMONDS);
-    Card d(Card::RANK_FOUR, Card::SUIT_DIAMONDS);
-    Card e(Card::RANK_ACE,Card::SUIT_DIAMONDS);
-    alice->add_card(a);
-    alice->add_card(b);
-    alice->add_card(c);
-    alice->add_card(d);
-    alice->add_card(e);
-    ASSERT_EQUAL(alice->lead_card(trump),b);
-}
-
-TEST(test_lead_card_edge2) {
-    Player * alice = Player_factory("Alice", "Simple");
-    std::string trump = Card::SUIT_CLUBS;
-    Card a(Card::RANK_TWO,Card::SUIT_DIAMONDS);
-    Card b(Card::RANK_JACK, Card::SUIT_DIAMONDS);
-    Card c(Card::RANK_TWO,Card::SUIT_DIAMONDS);
-    Card d(Card::RANK_FOUR, Card::SUIT_DIAMONDS);
-    Card e(Card::RANK_ACE,Card::SUIT_DIAMONDS);
-    alice->add_card(a);
-    alice->add_card(b);
-    alice->add_card(c);
-    alice->add_card(d);
-    alice->add_card(e);
-    ASSERT_EQUAL(alice->lead_card(trump),e);
-}
 //test simple add card
 TEST(test_simple_add_card_basic) {
     Player * alice = Player_factory("Alice", "Simple");
@@ -115,8 +51,152 @@ TEST(test_simple_add_card_edge) {
     ASSERT_NOT_EQUAL(alice->play_card(c,Card::SUIT_CLUBS), d);
 }
 
+//test make trump
+TEST(test_simple_make_trump_basic) {
+    Player * alice = Player_factory("Alice", "Simple");
+    std::string trump = " ";
+    Card up = Card(Card::RANK_QUEEN, Card::SUIT_DIAMONDS);
+    Card a(Card::RANK_TWO,Card::SUIT_CLUBS);
+    Card b(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_TWO,Card::SUIT_HEARTS);
+    Card d(Card::RANK_QUEEN, Card::SUIT_DIAMONDS);
+    Card e(Card::RANK_TWO,Card::SUIT_HEARTS);
+    alice->add_card(a);
+    alice->add_card(b);
+    alice->add_card(c);
+    alice->add_card(d);
+    alice->add_card(e);
+    ASSERT_EQUAL(alice->make_trump(up,true,1,trump),true);
+    ASSERT_EQUAL(trump,Card::SUIT_DIAMONDS);
+}
+
+TEST(test_simple_make_trump_basic2) {
+    Player * alice = Player_factory("Alice", "Simple");
+    std::string trump = " ";
+    Card up = Card(Card::RANK_QUEEN, Card::SUIT_CLUBS);
+    Card a(Card::RANK_TWO,Card::SUIT_CLUBS);
+    Card b(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_TWO,Card::SUIT_HEARTS);
+    Card d(Card::RANK_QUEEN, Card::SUIT_DIAMONDS);
+    Card e(Card::RANK_TWO,Card::SUIT_HEARTS);
+    alice->add_card(a);
+    alice->add_card(b);
+    alice->add_card(c);
+    alice->add_card(d);
+    alice->add_card(e);
+    ASSERT_EQUAL(alice->make_trump(up,true,1,trump),false)
+}
+
+TEST(test_simple_make_trump_edge) {
+    Player * alice = Player_factory("Alice", "Simple");
+    std::string trump = "";
+    std::string trump2 = "";
+    Card up = Card(Card::RANK_QUEEN, Card::SUIT_DIAMONDS);
+    Card up2 = Card(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+    Card a(Card::RANK_TWO,Card::SUIT_CLUBS);
+    Card b(Card::RANK_THREE, Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_TWO,Card::SUIT_HEARTS);
+    Card d(Card::RANK_QUEEN, Card::SUIT_DIAMONDS);
+    Card e(Card::RANK_TWO,Card::SUIT_HEARTS);
+    alice->add_card(a);
+    alice->add_card(b);
+    alice->add_card(c);
+    alice->add_card(d);
+    alice->add_card(e);
+    ASSERT_EQUAL(alice->make_trump(up,false,2,trump),true);
+    ASSERT_EQUAL(trump,Card::SUIT_DIAMONDS);
+    ASSERT_EQUAL(alice->make_trump(up2,false,2,trump2),false);
+}
+
+TEST(test_simple_make_trump_edge2) {
+     Player * alice = Player_factory("Alice", "Simple");
+    std::string trump = "";
+    std::string trump2 = "";
+    Card up = Card(Card::RANK_QUEEN, Card::SUIT_DIAMONDS);
+    Card up2 = Card(Card::RANK_QUEEN, Card::SUIT_HEARTS);
+    Card a(Card::RANK_TWO,Card::SUIT_CLUBS);
+    Card b(Card::RANK_THREE, Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_TWO,Card::SUIT_HEARTS);
+    Card d(Card::RANK_QUEEN, Card::SUIT_DIAMONDS);
+    Card e(Card::RANK_TWO,Card::SUIT_HEARTS);
+    alice->add_card(a);
+    alice->add_card(b);
+    alice->add_card(c);
+    alice->add_card(d);
+    alice->add_card(e);
+    ASSERT_EQUAL(alice->make_trump(up,true,2,trump),true);
+    ASSERT_EQUAL(trump,Card::SUIT_DIAMONDS);
+    ASSERT_EQUAL(alice->make_trump(up2,true,2,trump2),true);
+    ASSERT_EQUAL(trump2,Card::SUIT_HEARTS);
+}
+
+//test lead card
+TEST(test_simple_card_basic) {
+    Player * alice = Player_factory("Alice", "Simple");
+    std::string trump = Card::SUIT_DIAMONDS;
+    Card a(Card::RANK_TWO,Card::SUIT_CLUBS);
+    Card b(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_TWO,Card::SUIT_HEARTS);
+    Card d(Card::RANK_FOUR, Card::SUIT_DIAMONDS);
+    Card e(Card::RANK_TWO,Card::SUIT_HEARTS);
+    alice->add_card(a);
+    alice->add_card(b);
+    alice->add_card(c);
+    alice->add_card(d);
+    alice->add_card(e);
+    ASSERT_EQUAL(alice->lead_card(trump),a);
+}
+
+TEST(test_simple_card_basic2) {
+    Player * alice = Player_factory("Alice", "Simple");
+    std::string trump = Card::SUIT_DIAMONDS;
+    Card a(Card::RANK_TWO,Card::SUIT_DIAMONDS);
+    Card b(Card::RANK_ACE, Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_TWO,Card::SUIT_DIAMONDS);
+    Card d(Card::RANK_FOUR, Card::SUIT_DIAMONDS);
+    Card e(Card::RANK_JACK,Card::SUIT_HEARTS);
+    alice->add_card(a);
+    alice->add_card(b);
+    alice->add_card(c);
+    alice->add_card(d);
+    alice->add_card(e);
+    ASSERT_EQUAL(alice->lead_card(trump),e);
+}
+
+TEST(test_simple_card_edge) {
+    Player * alice = Player_factory("Alice", "Simple");
+    std::string trump = Card::SUIT_DIAMONDS;
+    Card a(Card::RANK_TWO,Card::SUIT_DIAMONDS);
+    Card b(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_TWO,Card::SUIT_DIAMONDS);
+    Card d(Card::RANK_FOUR, Card::SUIT_DIAMONDS);
+    Card e(Card::RANK_ACE,Card::SUIT_DIAMONDS);
+    alice->add_card(a);
+    alice->add_card(b);
+    alice->add_card(c);
+    alice->add_card(d);
+    alice->add_card(e);
+    ASSERT_EQUAL(alice->lead_card(trump),b);
+}
+
+TEST(test_simple_card_edge2) {
+    Player * alice = Player_factory("Alice", "Simple");
+    std::string trump = Card::SUIT_CLUBS;
+    Card a(Card::RANK_TWO,Card::SUIT_DIAMONDS);
+    Card b(Card::RANK_JACK, Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_TWO,Card::SUIT_DIAMONDS);
+    Card d(Card::RANK_FOUR, Card::SUIT_DIAMONDS);
+    Card e(Card::RANK_ACE,Card::SUIT_DIAMONDS);
+    alice->add_card(a);
+    alice->add_card(b);
+    alice->add_card(c);
+    alice->add_card(d);
+    alice->add_card(e);
+    ASSERT_EQUAL(alice->lead_card(trump),e);
+}
+
 //test play card
-TEST(test_play_card_basic) {
+TEST(test_simple_card_basic12) {
     Player * alice = Player_factory("Alice", "Simple");
     std::string trump = Card::SUIT_DIAMONDS;
     Card led = Card(Card::RANK_EIGHT, Card::SUIT_SPADES);
@@ -133,7 +213,7 @@ TEST(test_play_card_basic) {
     ASSERT_EQUAL(alice->play_card(led,trump), c);
 }
 
-TEST(test_play_card_basic2) {
+TEST(test_simple_card_basic22) {
     Player * alice = Player_factory("Alice", "Simple");
     std::string trump = Card::SUIT_DIAMONDS;
     Card led = Card(Card::RANK_EIGHT, Card::SUIT_CLUBS);
@@ -150,7 +230,7 @@ TEST(test_play_card_basic2) {
     ASSERT_EQUAL(alice->play_card(led,trump), a);
 }
 
-TEST(test_play_card_basic3) {
+TEST(test_simple_card_basic33) {
     Player * alice = Player_factory("Alice", "Simple");
     std::string trump = Card::SUIT_SPADES;
     Card led = Card(Card::RANK_EIGHT, Card::SUIT_CLUBS);
@@ -167,7 +247,7 @@ TEST(test_play_card_basic3) {
     ASSERT_EQUAL(alice->play_card(led,trump), a);
 }
 
-TEST(test_play_card_basic4) {
+TEST(test_simple_card_basic4) {
   Player * alice = Player_factory("Alice", "Simple");
     std::string trump = Card::SUIT_SPADES;
     Card led = Card(Card::RANK_EIGHT, Card::SUIT_CLUBS);
@@ -184,7 +264,7 @@ TEST(test_play_card_basic4) {
     ASSERT_EQUAL(alice->play_card(led,trump), c);
 }
 
-TEST(test_play_card_basic5) {
+TEST(test_simple_card_basic5) {
   Player * alice = Player_factory("Alice", "Simple");
     std::string trump = Card::SUIT_SPADES;
     Card led = Card(Card::RANK_EIGHT, Card::SUIT_SPADES);
@@ -201,7 +281,7 @@ TEST(test_play_card_basic5) {
     ASSERT_EQUAL(alice->play_card(led,trump), a);
 }
 
-TEST(test_play_card_basic6) {
+TEST(test_simple_card_basic6) {
   Player * alice = Player_factory("Alice", "Simple");
     std::string trump = Card::SUIT_SPADES;
     Card led = Card(Card::RANK_EIGHT, Card::SUIT_SPADES);
@@ -218,7 +298,7 @@ TEST(test_play_card_basic6) {
     ASSERT_EQUAL(alice->play_card(led,trump), b);
 }
 
-TEST(test_play_card_basic7) {
+TEST(test_simple_card_basic7) {
   Player * alice = Player_factory("Alice", "Simple");
     std::string trump = Card::SUIT_SPADES;
     Card led = Card(Card::RANK_EIGHT, Card::SUIT_DIAMONDS);
@@ -235,7 +315,7 @@ TEST(test_play_card_basic7) {
     ASSERT_EQUAL(alice->play_card(led,trump), c);
 }
 
-TEST(test_play_card_basic8) {
+TEST(test_simple_card_basic8) {
   Player * alice = Player_factory("Alice", "Simple");
     std::string trump = Card::SUIT_SPADES;
     Card led = Card(Card::RANK_EIGHT, Card::SUIT_SPADES);
@@ -252,7 +332,7 @@ TEST(test_play_card_basic8) {
     ASSERT_EQUAL(alice->play_card(led,trump), a);
 }
 
-TEST(test_play_card_basic9) {
+TEST(test_simple_card_basic9) {
   Player * alice = Player_factory("Alice", "Simple");
     std::string trump = Card::SUIT_SPADES;
     Card led = Card(Card::RANK_EIGHT, Card::SUIT_CLUBS);
