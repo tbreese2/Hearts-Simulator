@@ -139,8 +139,12 @@ bool Simple::make_trump(const Card &upcard, bool is_dealer,
                           int round, std::string &order_up_suit) const
 {
   int trumpCardsInHand = 0;
-  for (size_t i = 0; i < cards.size(); i++) {
-    if (cards[i].is_trump(upcard.get_suit()) && cards[i].is_face()) {
+  std::vector<Card> cards_temp = cards;
+  Card up = upcard;
+  cards_temp.push_back(upcard);
+
+  for (size_t i = 0; i < cards_temp.size(); i++) {
+    if (cards_temp[i].is_trump(upcard.get_suit()) && cards_temp[i].is_face()) {
       trumpCardsInHand++;
     }
   }
@@ -236,7 +240,7 @@ Card Simple::play_card(const Card &led_card, const std::string &trump) {
   c = Card(Card::RANK_ACE,Card::SUIT_DIAMONDS);
   lowestIndex = 0;
   for (size_t i = 0; i < cards.size(); i++) {
-    if (cards[i]<=c) {
+    if (!Card_less(c,cards[i],trump)) {
       c = cards[i];
       lowestIndex = i;
     }
