@@ -139,12 +139,8 @@ bool Simple::make_trump(const Card &upcard, bool is_dealer,
                           int round, std::string &order_up_suit) const
 {
   int trumpCardsInHand = 0;
-  std::vector<Card> cards_temp = cards;
-  Card up = upcard;
-  cards_temp.push_back(upcard);
-
-  for (size_t i = 0; i < cards_temp.size(); i++) {
-    if (cards_temp[i].is_trump(upcard.get_suit()) && cards_temp[i].is_face()) {
+  for (size_t i = 0; i < cards.size(); i++) {
+    if (cards[i].is_trump(upcard.get_suit()) && cards[i].is_face()) {
       trumpCardsInHand++;
     }
   }
@@ -156,12 +152,18 @@ bool Simple::make_trump(const Card &upcard, bool is_dealer,
     }
     return false;
   }
+  trumpCardsInHand = 0;
+  for (size_t i = 0; i < cards.size(); i++) {
+    if (cards[i].is_trump(Suit_next(upcard.get_suit())) && cards[i].is_face()) {
+      trumpCardsInHand++;
+    }
+  }
   if (is_dealer) {
-    order_up_suit = upcard.get_suit();
+    order_up_suit = Suit_next(upcard.get_suit());
     return true;
   }
   if (trumpCardsInHand > 0){
-    order_up_suit = upcard.get_suit();
+    order_up_suit = Suit_next(upcard.get_suit());
     return true;
   }
   return false;

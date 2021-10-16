@@ -115,8 +115,8 @@ TEST(test_simple_make_trump_basic3) {
         2,
         trump
     );
-    ASSERT_TRUE(orderup);
-    ASSERT_EQUAL(trump,Card::SUIT_DIAMONDS);
+    ASSERT_FALSE(orderup);
+
     delete alice;
 }
 
@@ -141,7 +141,32 @@ TEST(test_simple_make_trump_basic4) {
         trump
     );
     ASSERT_TRUE(orderup);
-    ASSERT_EQUAL(trump,Card::SUIT_HEARTS);
+    ASSERT_EQUAL(trump,Card::SUIT_DIAMONDS);
+    delete alice;
+}
+
+TEST(test_simple_make_trump_basic5) {
+    Player * alice = Player_factory("Alice", "Simple");
+    std::string trump = "";
+    Card up = Card(Card::RANK_QUEEN, Card::SUIT_SPADES);
+    Card a(Card::RANK_TWO,Card::SUIT_CLUBS);
+    Card b(Card::RANK_THREE, Card::SUIT_DIAMONDS);
+    Card c(Card::RANK_TWO,Card::SUIT_HEARTS);
+    Card d(Card::RANK_QUEEN, Card::SUIT_DIAMONDS);
+    Card e(Card::RANK_TWO,Card::SUIT_HEARTS);
+    alice->add_card(a);
+    alice->add_card(b);
+    alice->add_card(c);
+    alice->add_card(d);
+    alice->add_card(e);
+    bool orderup = alice->make_trump(
+        up,
+        true,
+        2,
+        trump
+    );
+    ASSERT_TRUE(orderup);
+    ASSERT_EQUAL(trump,Card::SUIT_CLUBS);
     delete alice;
 }
 
