@@ -297,7 +297,7 @@ bool Human::make_trump(const Card &upcard, bool is_dealer,
 //EFFECTS  Player adds one card to hand and removes one card from hand.
 void Human::add_and_discard(const Card &upcard)
 {
-  std::cout << "Human player " << name <<", please select a card:" << std::endl;
+  std::cout << "Human player " << name <<", please select a card to discard:" << std::endl;
   std::string input;
   std::cin >> input;
   if (stoi(input) == -1) {
