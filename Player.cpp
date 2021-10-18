@@ -283,8 +283,10 @@ void Human::add_card(const Card &c)
 bool Human::make_trump(const Card &upcard, bool is_dealer,
                           int round, std::string &order_up_suit) const
 {
-  for (size_t i = 0; i < cards.size(); i++) {
-    std::cout << "Human player " << name << "'s hand: [" << i << "] " << cards[i].get_rank() << " of " << cards[i].get_suit() << std::endl;
+  std::vector<Card> temp = cards;
+  std::sort(temp.begin(), temp.end());
+  for (size_t i = 0; i < temp.size(); i++) {
+    std::cout << "Human player " << name << "'s hand: [" << i << "] " << temp[i].get_rank() << " of " << temp[i].get_suit() << std::endl;
   }
   std::cout << "Human player " << name <<", please enter a suit, or \"pass\":" << std::endl;
   std::string input;
@@ -300,17 +302,21 @@ bool Human::make_trump(const Card &upcard, bool is_dealer,
 //EFFECTS  Player adds one card to hand and removes one card from hand.
 void Human::add_and_discard(const Card &upcard)
 {
-  for (size_t i = 0; i < cards.size(); i++) {
-    std::cout << "Human player " << name << "'s hand: [" << i << "] " << cards[i].get_rank() << " of " << cards[i].get_suit() << std::endl;
+  std::vector<Card> temp = cards;
+  std::sort(temp.begin(), temp.end());
+  for (size_t i = 0; i < temp.size(); i++) {
+    std::cout << "Human player " << name << "'s hand: [" << i << "] " << temp[i].get_rank() << " of " << temp[i].get_suit() << std::endl;
   }
   std::cout << "Discard upcard: [-1]" << std::endl;
   std::cout << "Human player " << name <<", please select a card to discard:" << std::endl;
   std::string input;
   std::cin >> input;
   if (stoi(input) == -1) {
+    cards = temp;
   } else {
-    cards.push_back(upcard);
-    cards.erase(cards.begin()+stoi(input));
+    temp.push_back(upcard);
+    temp.erase(temp.begin()+stoi(input));
+    cards = temp;
   }
 }
 
@@ -320,30 +326,36 @@ void Human::add_and_discard(const Card &upcard)
 //  is removed the player's hand.
 Card Human::lead_card(const std::string &trump)
 {
-  for (size_t i = 0; i < cards.size(); i++) {
-    std::cout << "Human player " << name << "'s hand: [" << i << "] " << cards[i].get_rank() << " of " << cards[i].get_suit() << std::endl;
+  std::vector<Card> temp = cards;
+  std::sort(temp.begin(), temp.end());
+  for (size_t i = 0; i < temp.size(); i++) {
+    std::cout << "Human player " << name << "'s hand: [" << i << "] " << temp[i].get_rank() << " of " << temp[i].get_suit() << std::endl;
   }
   std::cout << "Human player " << name <<", please select a card:" << std::endl;
   std::string input;
   std::cin >> input;
-  Card temp = cards[stoi(input)];
-  cards.erase(cards.begin()+stoi(input));
-  return temp;
+  Card temp1 = temp[stoi(input)];
+  temp.erase(temp.begin()+stoi(input));
+  cards = temp;
+  return temp1;
 }
 
 //REQUIRES Player has at least one card, trump is a valid suit
 //EFFECTS  Plays one Card from Player's hand according to their strategy.
 //  The card is removed from the player's hand.
 Card Human::play_card(const Card &led_card, const std::string &trump) {
-  for (size_t i = 0; i < cards.size(); i++) {
-    std::cout << "Human player " << name << "'s hand: [" << i << "] " << cards[i].get_rank() << " of " << cards[i].get_suit() << std::endl;
+   std::vector<Card> temp = cards;
+  std::sort(temp.begin(), temp.end());
+  for (size_t i = 0; i < temp.size(); i++) {
+    std::cout << "Human player " << name << "'s hand: [" << i << "] " << temp[i].get_rank() << " of " << temp[i].get_suit() << std::endl;
   }
   std::cout << "Human player " << name <<", please select a card:" << std::endl;
   std::string input;
   std::cin >> input;
-  Card temp = cards[stoi(input)];
-  cards.erase(cards.begin()+stoi(input));
-  return temp;
+  Card temp1 = temp[stoi(input)];
+  temp.erase(temp.begin()+stoi(input));
+  cards = temp;
+  return temp1;
 }
 
 
