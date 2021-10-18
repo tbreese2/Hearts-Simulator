@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
 
         //find dealer and announce
         int dealer = hand % 4;
-        std::cout << pArray[dealer]->get_name() << " deals";
+        std::cout << pArray[dealer]->get_name() << " deals" << std::endl;
 
         //set variables to deal cards
         int dealPattern[] = {3,2,3,2,2,3,2,3};
@@ -124,9 +124,9 @@ int main(int argc, char *argv[])
         //loop through players to establish trump
         int count = 0;
         bool trump_ordered = false;
-        int round_order = 0;
-        int player_ordered = 0;
         std::string order_up_suit = " ";
+        int order_up_player = 0;
+
         //loop through players starting with player to the left of dealer
         for (size_t i = dealer+1; i < dealer+9; i++) {
             //get player number
@@ -136,9 +136,61 @@ int main(int argc, char *argv[])
             if (count < 4) {
                 trump_ordered = pArray[playerNum]->make_trump(up_card,playerNum==dealer,1,order_up_suit);
                 if (trump_ordered) {
-                    
+                    pArray[dealer]->add_and_discard(up_card);
+                    order_up_player = playerNum;
+                    break;
                 }
-            }  
+            }  else if (count < 8) {
+                trump_ordered = pArray[playerNum]->make_trump(up_card,playerNum==dealer,1,order_up_suit);
+                if (trump_ordered) {
+                    order_up_player = playerNum;
+                    break;
+                }
+            }
+            count ++;
+        }
+        
+        //initialize trick variables
+        int currentLeader = (dealer+1) % 4;
+
+        //play 5 tricks
+        for (int i = 0; i < 5; i++) {
+            //initialize vector to hold trick
+            std::vector<Card> trick;
+
+            //start by lead player playing
+            trick.push_back(pArray[currentLeader]->lead_card(order_up_suit));
+
+            //find other three players
+            int player2 = (currentLeader+1) % 4;
+            int player3 = (currentLeader+2) % 4;
+            int player4 = (currentLeader+3) % 4;
+
+            //have other three players play
+            pArray[player2]->play_card(trick[0], order_up_suit);
+            pArray[player3]->play_card(trick[0], order_up_suit);
+            pArray[player4]->play_card(trick[0], order_up_suit);
+
+            //now find highest card in trick
+            Card c = trick[0];
+            int playerWHighestCard = currentLeader;
+            int playerCount = 0;
+
+            //loop through all cards in trick
+            for (size_t ti = 0; ti < 4; ti++) {
+
+                //if card is greator than current highest card,
+                //replace c with current card and take note of player
+                //with that card
+                if (Card_less(c,trick[ti],trick[0],order_up_suit)) {
+                    c = trick[ti];
+                    playerWHighestCard = currentLeader + playerCount;
+                    playerWHighestCard = playerWHighestCard % 4;
+                }
+
+                //increment player count
+                playerCount++;
+            }
         }
 
 
