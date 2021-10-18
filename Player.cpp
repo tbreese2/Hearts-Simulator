@@ -283,6 +283,9 @@ void Human::add_card(const Card &c)
 bool Human::make_trump(const Card &upcard, bool is_dealer,
                           int round, std::string &order_up_suit) const
 {
+  for (size_t i = 0; i < cards.size(); i++) {
+    std::cout << "Human player " << name << "'s hand: [" << i << "] " << cards[i].get_rank() << " of " << cards[i].get_suit() << std::endl;
+  }
   std::cout << "Human player " << name <<", please enter a suit, or \"pass\":" << std::endl;
   std::string input;
   std::cin >> input;
@@ -297,6 +300,10 @@ bool Human::make_trump(const Card &upcard, bool is_dealer,
 //EFFECTS  Player adds one card to hand and removes one card from hand.
 void Human::add_and_discard(const Card &upcard)
 {
+  for (size_t i = 0; i < cards.size(); i++) {
+    std::cout << "Human player " << name << "'s hand: [" << i << "] " << cards[i].get_rank() << " of " << cards[i].get_suit() << std::endl;
+  }
+  std::cout << "Discard upcard: [-1]" << std::endl;
   std::cout << "Human player " << name <<", please select a card to discard:" << std::endl;
   std::string input;
   std::cin >> input;
@@ -313,6 +320,9 @@ void Human::add_and_discard(const Card &upcard)
 //  is removed the player's hand.
 Card Human::lead_card(const std::string &trump)
 {
+  for (size_t i = 0; i < cards.size(); i++) {
+    std::cout << "Human player " << name << "'s hand: [" << i << "] " << cards[i].get_rank() << " of " << cards[i].get_suit() << std::endl;
+  }
   std::cout << "Human player " << name <<", please select a card:" << std::endl;
   std::string input;
   std::cin >> input;
@@ -325,6 +335,9 @@ Card Human::lead_card(const std::string &trump)
 //EFFECTS  Plays one Card from Player's hand according to their strategy.
 //  The card is removed from the player's hand.
 Card Human::play_card(const Card &led_card, const std::string &trump) {
+  for (size_t i = 0; i < cards.size(); i++) {
+    std::cout << "Human player " << name << "'s hand: [" << i << "] " << cards[i].get_rank() << " of " << cards[i].get_suit() << std::endl;
+  }
   std::cout << "Human player " << name <<", please select a card:" << std::endl;
   std::string input;
   std::cin >> input;
