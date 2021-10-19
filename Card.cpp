@@ -321,8 +321,8 @@ bool Card_less(const Card &a, const Card &b, const std::string &trump) {
     }
     if (rank_rhs == rank_lhs) {
         for (int s = 0; s < 4; s++) {
-            if (a.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) suit_lhs = s;
-            if (b.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) suit_rhs = s;
+            if (a.get_suit(trump) == SUIT_NAMES_BY_WEIGHT[s]) suit_lhs = s;
+            if (b.get_suit(trump) == SUIT_NAMES_BY_WEIGHT[s]) suit_rhs = s;
         }
         if (suit_lhs < suit_rhs) return true;
         return false;
@@ -347,8 +347,8 @@ bool Card_less(const Card &a, const Card &b, const Card &led_card,
         if (b.is_right_bower(trump)) rank_rhs += 14;
         if (a.is_left_bower(trump)) rank_lhs += 13;
         if (b.is_left_bower(trump)) rank_rhs += 13;
-        if (a.get_suit() == led_card.get_suit()) rank_lhs += 13;
-        if (b.get_suit() == led_card.get_suit()) rank_rhs += 13;
+        if (a.get_suit(trump) == led_card.get_suit()) rank_lhs += 13;
+        if (b.get_suit(trump) == led_card.get_suit()) rank_rhs += 13;
     }
     if (rank_rhs == rank_lhs) {
         for (int s = 0; s < 4; s++) {

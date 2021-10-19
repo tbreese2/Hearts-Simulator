@@ -374,6 +374,24 @@ TEST(test_simple_card_basic22) {
     delete alice;
 }
 
+TEST(test_simple_card_basic23) {
+    Player * alice = Player_factory("Alice", "Simple");
+    std::string trump = Card::SUIT_HEARTS;
+    Card led = Card(Card::RANK_KING, Card::SUIT_SPADES);
+    Card a(Card::RANK_NINE,Card::SUIT_SPADES);
+    Card b(Card::RANK_JACK, Card::SUIT_HEARTS);
+    Card c(Card::RANK_QUEEN,Card::SUIT_SPADES);
+    Card d(Card::RANK_ACE, Card::SUIT_HEARTS);
+    alice->add_card(a);
+    alice->add_card(b);
+    alice->add_card(c);
+    alice->add_card(d);
+    ASSERT_EQUAL(alice->play_card(led,trump), c);
+
+    delete alice;
+}
+
+
 TEST(test_simple_card_basic33) {
     Player * alice = Player_factory("Alice", "Simple");
     std::string trump = Card::SUIT_SPADES;
@@ -492,15 +510,29 @@ TEST(test_simple_card_basic9) {
   Player * alice = Player_factory("Alice", "Simple");
     std::string trump = Card::SUIT_SPADES;
     Card led = Card(Card::RANK_EIGHT, Card::SUIT_CLUBS);
-    Card a(Card::RANK_TWO,Card::SUIT_CLUBS);
-    Card b(Card::RANK_JACK,Card::SUIT_DIAMONDS);
-    Card c(Card::RANK_JACK, Card::SUIT_DIAMONDS);
-    Card d(Card::RANK_FOUR, Card::SUIT_HEARTS);
-    Card e(Card::RANK_TWO,Card::SUIT_DIAMONDS);
+    Card a(Card::RANK_NINE,Card::SUIT_SPADES);
+    Card b(Card::RANK_NINE,Card::SUIT_HEARTS);
+    Card c(Card::RANK_QUEEN, Card::SUIT_DIAMONDS);
+    Card d(Card::RANK_KING, Card::SUIT_HEARTS);
+    Card e(Card::RANK_ACE,Card::SUIT_CLUBS);
     alice->add_card(a);
     alice->add_card(b);
     alice->add_card(c);
     alice->add_card(d);
+    alice->add_card(e);
+    ASSERT_EQUAL(alice->play_card(led,trump), e);
+
+    delete alice;
+}
+
+TEST(test_simple_card_basic10) {
+  Player * alice = Player_factory("Alice", "Simple");
+    std::string trump = Card::SUIT_DIAMONDS;
+    Card led = Card(Card::RANK_JACK, Card::SUIT_HEARTS);
+    Card a(Card::RANK_NINE,Card::SUIT_DIAMONDS);
+    Card b(Card::RANK_TEN,Card::SUIT_SPADES);
+    alice->add_card(a);
+    alice->add_card(b);
     ASSERT_EQUAL(alice->play_card(led,trump), a);
 
     delete alice;

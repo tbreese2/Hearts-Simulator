@@ -127,7 +127,8 @@ int main(int argc, char *argv[])
 
             //deal specific number of cards based on the deal pattern
             for (int c = 0; c < dealPattern[dealPatternI]; c++) {
-                pArray[playerNum]->add_card(p.deal_one());
+                Card a = p.deal_one();
+                pArray[playerNum]->add_card(a);
             }
 
             //increment deal pattern
@@ -155,7 +156,7 @@ int main(int argc, char *argv[])
             if (count < 4) {
                 trump_ordered = pArray[playerNum]->make_trump(up_card,playerNum==dealer,1,order_up_suit);
                 if (trump_ordered) {
-                    std::cout << pArray[order_up_player]->get_name() << " orders up " << order_up_suit << std::endl;
+                    std::cout << pArray[playerNum]->get_name() << " orders up " << order_up_suit << std::endl;
                     pArray[dealer]->add_and_discard(up_card);
                     order_up_player = playerNum;
                     break;
@@ -165,9 +166,11 @@ int main(int argc, char *argv[])
             }  else if (count < 8) {
                 trump_ordered = pArray[playerNum]->make_trump(up_card,playerNum==dealer,2,order_up_suit);
                 if (trump_ordered) {
-                    std::cout << pArray[order_up_player]->get_name() << " orders up " << order_up_suit << std::endl;
+                    std::cout << pArray[playerNum]->get_name() << " orders up " << order_up_suit << std::endl;
                     order_up_player = playerNum;
                     break;
+                }  else {
+                    std::cout << pArray[playerNum]->get_name() << " passes" << std::endl;
                 }
             }
             count ++;
@@ -199,7 +202,9 @@ int main(int argc, char *argv[])
             std::cout << trick[1].get_rank() << " of " << trick[1].get_suit() << " played by " << pArray[player2]->get_name() << std::endl;
             trick.push_back(pArray[player3]->play_card(trick[0], order_up_suit));
             std::cout << trick[2].get_rank() << " of " << trick[2].get_suit() << " played by " << pArray[player3]->get_name() << std::endl;
-            trick.push_back(pArray[player4]->play_card(trick[0], order_up_suit));
+            Card f = trick[0];
+            Card e = pArray[player4]->play_card(f, order_up_suit);
+            trick.push_back(e);
             std::cout << trick[3].get_rank() << " of " << trick[3].get_suit() << " played by " << pArray[player4]->get_name() << std::endl;
 
             //now find highest card in trick
@@ -213,6 +218,7 @@ int main(int argc, char *argv[])
                 //if card is greator than current highest card,
                 //replace c with current card and take note of player
                 //with that card
+               
                 if (!Card_less(trick[ti],c,trick[0],order_up_suit)) {
                     c = trick[ti];
                     playerWHighestCard = currentLeader + playerCount;
@@ -245,7 +251,7 @@ int main(int argc, char *argv[])
                 std::cout << "euchred!" << std::endl;
                 team_one_score += 2;
             } else {
-                if (team_one_tricks == 5) team_one_score += 2;
+                if (team_one_tricks == 5){ team_one_score += 2; std::cout << "march!" << std::endl; }
                 else team_one_score += 1;
             }
         } else if (team_one_tricks < team_two_tricks) {
@@ -254,7 +260,7 @@ int main(int argc, char *argv[])
                 std::cout << "euchred!" << std::endl;
                 team_two_score += 2;
             } else {
-                if (team_two_tricks == 5) team_two_score += 2;
+                if (team_two_tricks == 5){team_two_score += 2; std::cout << "march!" << std::endl;}
                 else team_two_score += 1;
             }
         }
@@ -267,9 +273,9 @@ int main(int argc, char *argv[])
         for (int i = 0; i < int(pArray.size()); ++i) {
             delete pArray[i];
         }
-    }
 
-    std::cout << std::endl;
+        std::cout << std::endl;
+    }
     
     std::vector<Player *> pArray;
     for (size_t i = 0; i < 4; i++) {
@@ -278,7 +284,7 @@ int main(int argc, char *argv[])
 
     if (team_one_score > team_two_score) {
         std::cout << pArray[team_one[0]]->get_name() << " and " << pArray[team_one[1]]->get_name() << " win!" << std::endl;
-    } else if (team_two_score < team_one_score) {
+    } else if (team_two_score > team_one_score) {
         std::cout << pArray[team_two[0]]->get_name() << " and " << pArray[team_two[1]]->get_name() << " win!" << std::endl;
     }
 

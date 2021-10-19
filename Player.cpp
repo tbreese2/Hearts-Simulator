@@ -223,25 +223,20 @@ Card Simple::lead_card(const std::string &trump)
 //  The card is removed from the player's hand.
 Card Simple::play_card(const Card &led_card, const std::string &trump) {
   int lowestIndex = -1;
-  Card c = Card(Card::RANK_TWO,led_card.get_suit());
+  Card c;
   for (size_t i = 0; i < cards.size(); i++) {
-    if (led_card.get_suit() == trump) {
-      if (!Card_less(cards[i],c,trump) && (cards[i].get_suit() == led_card.get_suit() || cards[i].is_left_bower(trump))) {
+    if (led_card.get_suit(trump) == cards[i].get_suit(trump)) {
+      if (lowestIndex == -1) {
+        c = cards[i];
+        lowestIndex = i;
+      } else if (!Card_less(cards[i],c,trump)) {
         c = cards[i];
         lowestIndex = i;
       }
-    } else if (Suit_next(led_card.get_suit()) == trump && cards[i].get_suit() == led_card.get_suit()) {
-      if (cards[i]>=c && !cards[i].is_left_bower(trump)) { c = cards[i]; lowestIndex = i; }
-    } else if (cards[i].get_suit() == led_card.get_suit()){
-      if (cards[i]>=c) { c = cards[i]; lowestIndex = i;}
     }
   }
   if (lowestIndex != -1) { cards.erase(cards.begin()+lowestIndex); return c; }
-  else if (c.get_suit() == led_card.get_suit() && lowestIndex != -1) { 
-    cards.erase(cards.begin()+lowestIndex); 
-    return c; 
-  }
-  c = Card(Card::RANK_ACE,Card::SUIT_DIAMONDS);
+  c = cards[0];
   lowestIndex = 0;
   for (size_t i = 0; i < cards.size(); i++) {
     if (!Card_less(c,cards[i],trump)) {
