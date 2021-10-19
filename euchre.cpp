@@ -75,7 +75,8 @@ void print_first_line(int argc, char *argv[]) {
 }
 
 //EFFECTS finds highest card in trick and sets new current leader
-void score_trick(std::vector<Card> &trick,Card c,std::string &order_up_suit, std::vector<Player *> &pArray){
+void score_trick(std::vector<Card> &trick,Card c,
+    std::string &order_up_suit, std::vector<Player *> &pArray){
     //loop through all cards in trick
     for (size_t ti = 0; ti < 4; ti++) {
 
@@ -93,7 +94,8 @@ void score_trick(std::vector<Card> &trick,Card c,std::string &order_up_suit, std
     }
 
     //print who won the trick
-    std::cout << pArray[playerWHighestCard]->get_name() << " takes the trick" << std::endl;
+    std::cout << pArray[playerWHighestCard]->get_name() 
+    << " takes the trick" << std::endl;
 
     //assign trick value to apropriate team
     if (playerWHighestCard == 0 || playerWHighestCard == 2) {
@@ -115,7 +117,9 @@ void play_trick(std::vector<Player *> &pArray, std::string &order_up_suit) {
 
     //start by lead player playing
     trick.push_back(pArray[currentLeader]->lead_card(order_up_suit));
-    std::cout << trick[0].get_rank() << " of " << trick[0].get_suit() << " led by " << pArray[currentLeader]->get_name() << std::endl;
+    std::cout << trick[0].get_rank() << " of " 
+    << trick[0].get_suit() << " led by " 
+    << pArray[currentLeader]->get_name() << std::endl;
 
     //find other three players
     int player2 = (currentLeader+1) % 4;
@@ -124,11 +128,17 @@ void play_trick(std::vector<Player *> &pArray, std::string &order_up_suit) {
 
     //have other three players play and print what play
     trick.push_back(pArray[player2]->play_card(trick[0], order_up_suit));
-    std::cout << trick[1].get_rank() << " of " << trick[1].get_suit() << " played by " << pArray[player2]->get_name() << std::endl;
+    std::cout << trick[1].get_rank() << " of " 
+    << trick[1].get_suit() << " played by " 
+    << pArray[player2]->get_name() << std::endl;
     trick.push_back(pArray[player3]->play_card(trick[0], order_up_suit));
-    std::cout << trick[2].get_rank() << " of " << trick[2].get_suit() << " played by " << pArray[player3]->get_name() << std::endl;
+    std::cout << trick[2].get_rank() << " of " 
+    << trick[2].get_suit() << " played by " 
+    << pArray[player3]->get_name() << std::endl;
     trick.push_back(pArray[player4]->play_card(trick[0], order_up_suit));
-    std::cout << trick[3].get_rank() << " of " << trick[3].get_suit() << " played by " << pArray[player4]->get_name() << std::endl;
+    std::cout << trick[3].get_rank() << " of " 
+    << trick[3].get_suit() << " played by " 
+    << pArray[player4]->get_name() << std::endl;
 
     //now find highest card in trick
     Card c = trick[0];
@@ -170,21 +180,28 @@ std::vector<int> play_tricks(std::vector<Player *> &pArray, std::string &order_u
 void score_hand(std::vector<Player *> &pArray) {
     //assign trick value to apropriate team
     if (team_one_tricks > team_two_tricks) {
-        std::cout << pArray[0]->get_name() << " and " << pArray[2]->get_name() << " win the hand" << std::endl;
+        std::cout << pArray[0]->get_name() << 
+        " and " << pArray[2]->get_name() << 
+        " win the hand" << std::endl;
         if (order_up_player == 1 || order_up_player == 3) {
             std::cout << "euchred!" << std::endl;
             team_one_score += 2;
         } else {
-            if (team_one_tricks == 5){ team_one_score += 2; std::cout << "march!" << std::endl; }
+            if (team_one_tricks == 5){ 
+                team_one_score += 2; 
+                std::cout << "march!" << std::endl; }
             else team_one_score += 1;
         }
     } else if (team_one_tricks < team_two_tricks) {
-        std::cout << pArray[1]->get_name() << " and " << pArray[3]->get_name() << " win the hand" << std::endl;
+        std::cout << pArray[1]->get_name() 
+        << " and " << pArray[3]->get_name() 
+        << " win the hand" << std::endl;
         if (order_up_player == 0 || order_up_player == 2) {
             std::cout << "euchred!" << std::endl;
             team_two_score += 2;
         } else {
-            if (team_two_tricks == 5){team_two_score += 2; std::cout << "march!" << std::endl;}
+            if (team_two_tricks == 5){team_two_score += 2; 
+            std::cout << "march!" << std::endl;}
             else team_two_score += 1;
         }
     }
@@ -234,7 +251,8 @@ int deal_hand(int argc, char *argv[], Pack &p, std::vector<Player *> &pArray) {
 
 //MODIFIES everything, all of it, idk
 //EFFECTS runs through players until trump is chosen
-void make_trump(std::vector<Player *> &pArray, Card &up_card, bool &trump_ordered, std::string &order_up_suit) {
+void make_trump(std::vector<Player *> &pArray, 
+    Card &up_card, bool &trump_ordered, std::string &order_up_suit) {
     //loop through players starting with player to the left of dealer
     for (size_t i = dealer+1; i < dealer+9; i++) {
         //get player number
@@ -242,19 +260,24 @@ void make_trump(std::vector<Player *> &pArray, Card &up_card, bool &trump_ordere
 
         //offer players chance to make upcard during first round
         if (count < 4) {
-            trump_ordered = pArray[playerNum]->make_trump(up_card,playerNum==dealer,1,order_up_suit);
+            trump_ordered = 
+            pArray[playerNum]->make_trump(up_card,playerNum==dealer,1,order_up_suit);
             if (trump_ordered) {
-                std::cout << pArray[playerNum]->get_name() << " orders up " << order_up_suit << std::endl;
+                std::cout << pArray[playerNum]->get_name() 
+                << " orders up " << order_up_suit << std::endl;
                 pArray[dealer]->add_and_discard(up_card);
                 order_up_player = playerNum;
                 break;
             } else {
-                std::cout << pArray[playerNum]->get_name() << " passes" << std::endl;
+                std::cout << pArray[playerNum]->get_name() 
+                << " passes" << std::endl;
             }
         }  else if (count < 8) {
-            trump_ordered = pArray[playerNum]->make_trump(up_card,playerNum==dealer,2,order_up_suit);
+            trump_ordered = 
+            pArray[playerNum]->make_trump(up_card,playerNum==dealer,2,order_up_suit);
             if (trump_ordered) {
-                std::cout << pArray[playerNum]->get_name() << " orders up " << order_up_suit << std::endl;
+                std::cout << pArray[playerNum]->get_name() 
+                << " orders up " << order_up_suit << std::endl;
                 order_up_player = playerNum;
                 break;
             }  else {
@@ -278,8 +301,12 @@ void run_hand(std::vector<Player *> &pArray, std::string &order_up_suit) {
     score_hand(pArray);
 
     //print out points for each team
-    std::cout << pArray[0]->get_name() << " and " << pArray[2]->get_name() << " have " << team_one_score << " points" << std::endl;
-    std::cout << pArray[1]->get_name() << " and " << pArray[3]->get_name() << " have " << team_two_score << " points" << std::endl;
+    std::cout << pArray[0]->get_name() 
+    << " and " << pArray[2]->get_name() << " have " 
+    << team_one_score << " points" << std::endl;
+    std::cout << pArray[1]->get_name() 
+    << " and " << pArray[3]->get_name() 
+    << " have " << team_two_score << " points" << std::endl;
 
     //delete p array
     for (int i = 0; i < int(pArray.size()); ++i) {
@@ -306,7 +333,9 @@ void play_hand(int argc, char *argv[], Pack &p) {
         Card up_card = p.deal_one();
 
         //print upcard
-        std::cout << up_card.get_rank() << " of " << up_card.get_suit() << " turned up" << std::endl;
+        std::cout << up_card.get_rank() 
+        << " of " << up_card.get_suit() 
+        << " turned up" << std::endl;
 
         //establish trump
         count = 0;
@@ -360,9 +389,11 @@ void print_winning_team(std::vector<int> &team_scores, int argc, char *argv[]) {
     }
 
     if (team_scores[0] > team_scores[1]) {
-        std::cout << pArray[0]->get_name() << " and " << pArray[2]->get_name() << " win!" << std::endl;
+        std::cout << pArray[0]->get_name() << " and " 
+        << pArray[2]->get_name() << " win!" << std::endl;
     } else if (team_scores[1] > team_scores[0]) {
-        std::cout << pArray[1]->get_name() << " and " << pArray[3]->get_name() << " win!" << std::endl;
+        std::cout << pArray[1]->get_name() << " and " 
+        << pArray[3]->get_name() << " win!" << std::endl;
     }
 
     //delete p array

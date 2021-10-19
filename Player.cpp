@@ -109,7 +109,9 @@ public:
     std::vector<Card> temp = cards;
     std::sort(temp.begin(), temp.end());
     for (size_t i = 0; i < temp.size(); i++) {
-      std::cout << "Human player " << name << "'s hand: [" << i << "] " << temp[i].get_rank() << " of " << temp[i].get_suit() << std::endl;
+      std::cout << "Human player " << name << 
+      "'s hand: [" << i << "] " << temp[i].get_rank() 
+      << " of " << temp[i].get_suit() << std::endl;
     }
     std::cout << "Human player " << name <<", please select a card:" << std::endl;
     std::string input;
@@ -297,9 +299,12 @@ bool Human::make_trump(const Card &upcard, bool is_dealer,
   std::vector<Card> temp = cards;
   std::sort(temp.begin(), temp.end());
   for (size_t i = 0; i < temp.size(); i++) {
-    std::cout << "Human player " << name << "'s hand: [" << i << "] " << temp[i].get_rank() << " of " << temp[i].get_suit() << std::endl;
+    std::cout << "Human player " << name << "'s hand: [" 
+    << i << "] " << temp[i].get_rank() << " of " 
+    << temp[i].get_suit() << std::endl;
   }
-  std::cout << "Human player " << name <<", please enter a suit, or \"pass\":" << std::endl;
+  std::cout << "Human player " << name 
+  << ", please enter a suit, or \"pass\":" << std::endl;
   std::string input;
   std::cin >> input;
   if (input == "pass") {
@@ -316,10 +321,14 @@ void Human::add_and_discard(const Card &upcard)
   std::vector<Card> temp = cards;
   std::sort(temp.begin(), temp.end());
   for (size_t i = 0; i < temp.size(); i++) {
-    std::cout << "Human player " << name << "'s hand: [" << i << "] " << temp[i].get_rank() << " of " << temp[i].get_suit() << std::endl;
+    std::cout << "Human player " << 
+    name << "'s hand: [" << i << "] " 
+    << temp[i].get_rank() << " of " << 
+    temp[i].get_suit() << std::endl;
   }
   std::cout << "Discard upcard: [-1]" << std::endl;
-  std::cout << "Human player " << name <<", please select a card to discard:" << std::endl;
+  std::cout << "Human player " << name 
+  <<", please select a card to discard:" << std::endl;
   std::string input;
   std::cin >> input;
   if (stoi(input) == -1) {
