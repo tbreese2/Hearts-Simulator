@@ -352,8 +352,8 @@ bool Card_less(const Card &a, const Card &b, const Card &led_card,
     }
     if (rank_rhs == rank_lhs) {
         for (int s = 0; s < 4; s++) {
-            if (a.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) suit_lhs = s;
-            if (b.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) suit_rhs = s;
+            if (a.get_suit(trump) == SUIT_NAMES_BY_WEIGHT[s]) suit_lhs = s;
+            if (b.get_suit(trump) == SUIT_NAMES_BY_WEIGHT[s]) suit_rhs = s;
         }
         if (suit_lhs < suit_rhs) return true;
         return false;
