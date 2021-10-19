@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <vector>
 #include "Card.h"
 // add any necessary #include or using directives here
 
@@ -157,12 +158,8 @@ bool Card::is_trump(const std::string &trump) const
 }
 
 //outside class functions
-
-//EFFECTS Returns true if lhs is lower value than rhs.
-//  Does not consider trump.
-bool operator<(const Card &lhs, const Card &rhs)
-{
-    int rank_lhs, rank_rhs, suit_lhs, suit_rhs;
+std::vector<int> equal_helper(const Card &lhs, const Card &rhs) {
+    int rank_lhs = 0, rank_rhs = 0, suit_lhs = 0, suit_rhs = 0;
     for (int r = 0; r < 13; r++) {
         if (lhs.get_rank() == RANK_NAMES_BY_WEIGHT[r]) {
             rank_lhs = r;
@@ -171,109 +168,70 @@ bool operator<(const Card &lhs, const Card &rhs)
             rank_rhs = r;
         }
     }
-    if (rank_rhs == rank_lhs) {
-        for (int s = 0; s < 4; s++) {
-            if (lhs.get_suit() == SUIT_NAMES_BY_WEIGHT[s]){
-                suit_lhs = s;
-            }
-            if (rhs.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) {
-                suit_rhs = s;
-            }
+    for (int s = 0; s < 4; s++) {
+        if (lhs.get_suit() == SUIT_NAMES_BY_WEIGHT[s]){
+            suit_lhs = s;
         }
-        if (suit_lhs < suit_rhs) return true;
-        return false;
+        if (rhs.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) {
+            suit_rhs = s;
+        }
     }
-    if (rank_lhs < rank_rhs) return true;
+    std::vector<int> arr = {rank_lhs, rank_rhs, suit_lhs, suit_rhs};
+    return arr;
+}
+
+//EFFECTS Returns true if lhs is lower value than rhs.
+//  Does not consider trump.
+bool operator<(const Card &lhs, const Card &rhs)
+{
+    std::vector<int> arr = equal_helper(lhs,rhs);
+    if (arr[1] == arr[0]) {
+        if (arr[2] < arr[3]) return true;
+        else return false;
+    }
+    if (arr[0] < arr[1]) return true;
     return false;
 }
 
 //EFFECTS Returns true if lhs is lower value than rhs or the same card as rhs.
 //  Does not consider trump.
 bool operator<=(const Card &lhs, const Card &rhs)
-{
-    int rank_lhs, rank_rhs, suit_lhs, suit_rhs;
-    for (int r = 0; r < 13; r++) {
-        if (lhs.get_rank() == RANK_NAMES_BY_WEIGHT[r]) {
-            rank_lhs = r;
-        }
-        if (rhs.get_rank() == RANK_NAMES_BY_WEIGHT[r]) {
-            rank_rhs = r;
-        }
-    }
-    if (rank_rhs == rank_lhs) {
-        for (int s = 0; s < 4; s++) {
-            if (lhs.get_suit() == SUIT_NAMES_BY_WEIGHT[s]){
-                suit_lhs = s;
-            }
-            if (rhs.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) {
-                suit_rhs = s;
-            }
-        }
-        if (suit_lhs == suit_rhs) return true;
-        else if (suit_lhs < suit_rhs) return true;
+{   
+    std::vector<int> arr = equal_helper(lhs,rhs);
+    if (arr[1] == arr[0]) {
+        if (arr[2] == arr[3]) return true;
+        else if (arr[2] < arr[3]) return true;
         else return false;
     }
-    if (rank_lhs < rank_rhs) return true;
-    else return false;
+    if (arr[0] < arr[1]) return true;
+    return false;
 }
 
 //EFFECTS Returns true if lhs is higher value than rhs.
 //  Does not consider trump.
 bool operator>(const Card &lhs, const Card &rhs)
 {
-    int rank_lhs, rank_rhs, suit_lhs, suit_rhs;
-    for (int r = 0; r < 13; r++) {
-        if (lhs.get_rank() == RANK_NAMES_BY_WEIGHT[r]) {
-            rank_lhs = r;
-        }
-        if (rhs.get_rank() == RANK_NAMES_BY_WEIGHT[r]) {
-            rank_rhs = r;
-        }
-    }
-    if (rank_rhs == rank_lhs) {
-        for (int s = 0; s < 4; s++) {
-            if (lhs.get_suit() == SUIT_NAMES_BY_WEIGHT[s]){
-                suit_lhs = s;
-            }
-            if (rhs.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) {
-                suit_rhs = s;
-            }
-        }
-        if (suit_lhs > suit_rhs) return true;
+    std::vector<int> arr = equal_helper(lhs,rhs);
+    if (arr[1] == arr[0]) {
+        if (arr[2] > arr[3]) return true;
         else return false;
     }
-    if (rank_lhs > rank_rhs) return true;
-    else return false;
+    if (arr[0] > arr[1]) return true;
+    return false;
 }
 
 //EFFECTS Returns true if lhs is higher value than rhs or the same card as rhs.
 //  Does not consider trump.
 bool operator>=(const Card &lhs, const Card &rhs)
 {
-    int rank_lhs, rank_rhs, suit_lhs, suit_rhs;
-    for (int r = 0; r < 13; r++) {
-        if (lhs.get_rank() == RANK_NAMES_BY_WEIGHT[r]) {
-            rank_lhs = r;
-        }
-        if (rhs.get_rank() == RANK_NAMES_BY_WEIGHT[r]) {
-            rank_rhs = r;
-        }
-    }
-    if (rank_rhs == rank_lhs) {
-        for (int s = 0; s < 4; s++) {
-            if (lhs.get_suit() == SUIT_NAMES_BY_WEIGHT[s]){
-                suit_lhs = s;
-            }
-            if (rhs.get_suit() == SUIT_NAMES_BY_WEIGHT[s]) {
-                suit_rhs = s;
-            }
-        }
-        if (suit_lhs == suit_rhs) return true;
-        else if (suit_lhs > suit_rhs) return true;
+    std::vector<int> arr = equal_helper(lhs,rhs);
+    if (arr[1] == arr[0]) {
+        if (arr[2] == arr[3]) return true;
+        else if (arr[2] > arr[3]) return true;
         else return false;
     }
-    if (rank_lhs > rank_rhs) return true;
-    else return false;
+    if (arr[0] > arr[1]) return true;
+    return false;
 }
 
 //EFFECTS Returns true if lhs is same card as rhs.

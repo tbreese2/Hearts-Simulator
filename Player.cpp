@@ -103,6 +103,22 @@ public:
 
   // Maximum number of cards in a player's hand
   static const int MAX_HAND_SIZE = 5;
+
+  //helper functions
+  Card play_card_human() {
+    std::vector<Card> temp = cards;
+    std::sort(temp.begin(), temp.end());
+    for (size_t i = 0; i < temp.size(); i++) {
+      std::cout << "Human player " << name << "'s hand: [" << i << "] " << temp[i].get_rank() << " of " << temp[i].get_suit() << std::endl;
+    }
+    std::cout << "Human player " << name <<", please select a card:" << std::endl;
+    std::string input;
+    std::cin >> input;
+    Card temp1 = temp[stoi(input)];
+    temp.erase(temp.begin()+stoi(input));
+    cards = temp;
+    return temp1;
+  }
 private:
   std::string name;
   std::vector<Card> cards;
@@ -321,36 +337,14 @@ void Human::add_and_discard(const Card &upcard)
 //  is removed the player's hand.
 Card Human::lead_card(const std::string &trump)
 {
-  std::vector<Card> temp = cards;
-  std::sort(temp.begin(), temp.end());
-  for (size_t i = 0; i < temp.size(); i++) {
-    std::cout << "Human player " << name << "'s hand: [" << i << "] " << temp[i].get_rank() << " of " << temp[i].get_suit() << std::endl;
-  }
-  std::cout << "Human player " << name <<", please select a card:" << std::endl;
-  std::string input;
-  std::cin >> input;
-  Card temp1 = temp[stoi(input)];
-  temp.erase(temp.begin()+stoi(input));
-  cards = temp;
-  return temp1;
+  return play_card_human();
 }
 
 //REQUIRES Player has at least one card, trump is a valid suit
 //EFFECTS  Plays one Card from Player's hand according to their strategy.
 //  The card is removed from the player's hand.
 Card Human::play_card(const Card &led_card, const std::string &trump) {
-   std::vector<Card> temp = cards;
-  std::sort(temp.begin(), temp.end());
-  for (size_t i = 0; i < temp.size(); i++) {
-    std::cout << "Human player " << name << "'s hand: [" << i << "] " << temp[i].get_rank() << " of " << temp[i].get_suit() << std::endl;
-  }
-  std::cout << "Human player " << name <<", please select a card:" << std::endl;
-  std::string input;
-  std::cin >> input;
-  Card temp1 = temp[stoi(input)];
-  temp.erase(temp.begin()+stoi(input));
-  cards = temp;
-  return temp1;
+  return lead_card(trump);
 }
 
 

@@ -62,7 +62,7 @@ void print_first_line(int argc, char *argv[]) {
 }
 
 //EFFECTS finds highest card in trick and sets new current leader
-void score_trick(std::vector<Card> &trick,Card c,int &currentLeader, int &playerWHighestCard, std::string &order_up_suit, int &playerCount, int &team_one_tricks, int &team_two_tricks, std::vector<Player *> &pArray){
+void score_trick(std::vector<Card> &trick,Card c,std::string &order_up_suit, std::vector<Player *> &pArray, int &playerCount, int &team_one_tricks, int &team_two_tricks, int &currentLeader, int &playerWHighestCard){
     //loop through all cards in trick
     for (size_t ti = 0; ti < 4; ti++) {
 
@@ -123,7 +123,7 @@ void play_trick(int &team_one_tricks, int &team_two_tricks, int &currentLeader, 
     int playerCount = 0;
     
     //call highest card function
-    score_trick(trick,c,currentLeader,playerWHighestCard,order_up_suit,playerCount,team_one_tricks,team_two_tricks,pArray);
+    score_trick(trick,c,order_up_suit,pArray,playerCount,team_one_tricks,team_two_tricks,currentLeader,playerWHighestCard);
 }
 
 //MODIFIES player array by playing each card in their hands
@@ -300,7 +300,6 @@ void play_hand(int &team_one_score, int &team_two_score, int argc, char *argv[],
         int order_up_player = 0;
         make_trump(dealer,pArray,count,up_card,trump_ordered,order_up_player,order_up_suit);
         std::cout << std::endl;
-        
         //run hand
         run_hand(team_one_score,team_two_score,pArray,order_up_player,dealer,order_up_suit);
         std::cout << std::endl;
