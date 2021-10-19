@@ -61,35 +61,8 @@ void print_first_line(int argc, char *argv[]) {
     std::cout << std::endl;
 }
 
-//MODIFIES each teams tricks taken
-//EFFECTS prints out each players discision and the
-//number of tricks they take
-void play_trick(int &team_one_tricks, int &team_two_tricks, int &currentLeader, std::vector<Player *> &pArray, std::string &order_up_suit) {
-     //initialize vector to hold trick
-    std::vector<Card> trick;
-
-    //start by lead player playing
-    trick.push_back(pArray[currentLeader]->lead_card(order_up_suit));
-    std::cout << trick[0].get_rank() << " of " << trick[0].get_suit() << " led by " << pArray[currentLeader]->get_name() << std::endl;
-
-    //find other three players
-    int player2 = (currentLeader+1) % 4;
-    int player3 = (currentLeader+2) % 4;
-    int player4 = (currentLeader+3) % 4;
-
-    //have other three players play and print what play
-    trick.push_back(pArray[player2]->play_card(trick[0], order_up_suit));
-    std::cout << trick[1].get_rank() << " of " << trick[1].get_suit() << " played by " << pArray[player2]->get_name() << std::endl;
-    trick.push_back(pArray[player3]->play_card(trick[0], order_up_suit));
-    std::cout << trick[2].get_rank() << " of " << trick[2].get_suit() << " played by " << pArray[player3]->get_name() << std::endl;
-    trick.push_back(pArray[player4]->play_card(trick[0], order_up_suit));
-    std::cout << trick[3].get_rank() << " of " << trick[3].get_suit() << " played by " << pArray[player4]->get_name() << std::endl;
-
-    //now find highest card in trick
-    Card c = trick[0];
-    int playerWHighestCard = currentLeader;
-    int playerCount = 0;
-
+//EFFECTS finds highest card in trick and sets new current leader
+void score_trick(std::vector<Card> &trick,Card c,int &currentLeader, int &playerWHighestCard, std::string &order_up_suit, int &playerCount, int &team_one_tricks, int &team_two_tricks, std::vector<Player *> &pArray){
     //loop through all cards in trick
     for (size_t ti = 0; ti < 4; ti++) {
 
@@ -118,6 +91,39 @@ void play_trick(int &team_one_tricks, int &team_two_tricks, int &currentLeader, 
 
     //set leader for next trick
     currentLeader = playerWHighestCard;
+}
+
+//MODIFIES each teams tricks taken
+//EFFECTS prints out each players discision and the
+//number of tricks they take
+void play_trick(int &team_one_tricks, int &team_two_tricks, int &currentLeader, std::vector<Player *> &pArray, std::string &order_up_suit) {
+     //initialize vector to hold trick
+    std::vector<Card> trick;
+
+    //start by lead player playing
+    trick.push_back(pArray[currentLeader]->lead_card(order_up_suit));
+    std::cout << trick[0].get_rank() << " of " << trick[0].get_suit() << " led by " << pArray[currentLeader]->get_name() << std::endl;
+
+    //find other three players
+    int player2 = (currentLeader+1) % 4;
+    int player3 = (currentLeader+2) % 4;
+    int player4 = (currentLeader+3) % 4;
+
+    //have other three players play and print what play
+    trick.push_back(pArray[player2]->play_card(trick[0], order_up_suit));
+    std::cout << trick[1].get_rank() << " of " << trick[1].get_suit() << " played by " << pArray[player2]->get_name() << std::endl;
+    trick.push_back(pArray[player3]->play_card(trick[0], order_up_suit));
+    std::cout << trick[2].get_rank() << " of " << trick[2].get_suit() << " played by " << pArray[player3]->get_name() << std::endl;
+    trick.push_back(pArray[player4]->play_card(trick[0], order_up_suit));
+    std::cout << trick[3].get_rank() << " of " << trick[3].get_suit() << " played by " << pArray[player4]->get_name() << std::endl;
+
+    //now find highest card in trick
+    Card c = trick[0];
+    int playerWHighestCard = currentLeader;
+    int playerCount = 0;
+    
+    //call highest card function
+    score_trick(trick,c,currentLeader,playerWHighestCard,order_up_suit,playerCount,team_one_tricks,team_two_tricks,pArray);
 }
 
 //MODIFIES player array by playing each card in their hands
@@ -171,6 +177,102 @@ void score_hand(int &team_one_score, int &team_two_score, std::vector<Player *> 
     }
 }
 
+//MODIFIES pack and player array
+//EFFECTS deals cards from pack to players in player array,
+//then returns the dealer
+int deal_hand(int argc, char *argv[], Pack &p, int &hand, std::vector<Player *> &pArray) {
+    //shuffle pack
+    if (strcmp1(argv[2],"shuffle") == 0) {
+        p.shuffle();
+    } else {
+        p.reset();
+    }
+
+    //print out hand number
+    std::cout << "Hand " << hand << std::endl;
+
+    //find dealer and announce
+    int dealer = hand % 4;
+    hand++;
+    std::cout << pArray[dealer]->get_name() << " deals" << std::endl;
+
+    //set variables to deal cards
+    int dealPattern[] = {3,2,3,2,2,3,2,3};
+    int dealPatternI = 0;
+
+    //loop through players starting with player to the left of dealer
+    for (size_t i = dealer+1; i < dealer+9; i++) {
+
+        //get player number
+        int playerNum = i % 4;
+
+        //deal specific number of cards based on the deal pattern
+        for (int c = 0; c < dealPattern[dealPatternI]; c++) {
+            Card a = p.deal_one();
+            pArray[playerNum]->add_card(a);
+        }
+
+        //increment deal pattern
+        dealPatternI++;
+    }
+
+    return dealer;
+}
+
+//MODIFIES everything, all of it, idk
+//EFFECTS runs through players until trump is chosen
+void make_trump(int &dealer, std::vector<Player *> &pArray, int &count, Card &up_card, bool &trump_ordered, int &order_up_player, std::string &order_up_suit) {
+    //loop through players starting with player to the left of dealer
+    for (size_t i = dealer+1; i < dealer+9; i++) {
+        //get player number
+        int playerNum = i % 4;
+
+        //offer players chance to make upcard during first round
+        if (count < 4) {
+            trump_ordered = pArray[playerNum]->make_trump(up_card,playerNum==dealer,1,order_up_suit);
+            if (trump_ordered) {
+                std::cout << pArray[playerNum]->get_name() << " orders up " << order_up_suit << std::endl;
+                pArray[dealer]->add_and_discard(up_card);
+                order_up_player = playerNum;
+                break;
+            } else {
+                std::cout << pArray[playerNum]->get_name() << " passes" << std::endl;
+            }
+        }  else if (count < 8) {
+            trump_ordered = pArray[playerNum]->make_trump(up_card,playerNum==dealer,2,order_up_suit);
+            if (trump_ordered) {
+                std::cout << pArray[playerNum]->get_name() << " orders up " << order_up_suit << std::endl;
+                order_up_player = playerNum;
+                break;
+            }  else {
+                std::cout << pArray[playerNum]->get_name() << " passes" << std::endl;
+            }
+        }
+        count++;
+    }
+}
+
+//REQUIRES 
+//MODIFIES everything
+//EFFECTS runs hand
+void run_hand(int &team_one_score, int &team_two_score, std::vector<Player *> &pArray, int &order_up_player, int &dealer, std::string &order_up_suit) {
+    //play 5 tricks
+    std::vector<int> team_tricks = play_tricks(dealer,pArray,order_up_suit);
+
+    //score hand
+    score_hand(team_one_score,team_two_score,pArray,team_tricks[0],team_tricks[1],order_up_player);
+
+    //print out points for each team
+    std::cout << pArray[0]->get_name() << " and " << pArray[2]->get_name() << " have " << team_one_score << " points" << std::endl;
+    std::cout << pArray[1]->get_name() << " and " << pArray[3]->get_name() << " have " << team_two_score << " points" << std::endl;
+
+    //delete p array
+    for (int i = 0; i < int(pArray.size()); ++i) {
+        delete pArray[i];
+    }
+
+}
+
 //REQUIRES p is a valid pack and team scores point to scores
 //MODIFIES team scores
 //EFFECTS runs until the team scores are greater than max points
@@ -184,99 +286,23 @@ void play_hand(int &team_one_score, int &team_two_score, int argc, char *argv[],
             pArray.push_back(Player_factory(argv[4+(2*i)], argv[5+(2*i)]));
         }
 
-        //shuffle pack
-        if (strcmp1(argv[2],"shuffle") == 0) {
-            p.shuffle();
-        } else {
-            p.reset();
-        }
-
-        //print out hand number
-        std::cout << "Hand " << hand << std::endl;
-
-        //find dealer and announce
-        int dealer = hand % 4;
-        hand++;
-        std::cout << pArray[dealer]->get_name() << " deals" << std::endl;
-
-        //set variables to deal cards
-        int dealPattern[] = {3,2,3,2,2,3,2,3};
-        int dealPatternI = 0;
-
-        //loop through players starting with player to the left of dealer
-        for (size_t i = dealer+1; i < dealer+9; i++) {
-
-            //get player number
-            int playerNum = i % 4;
-
-            //deal specific number of cards based on the deal pattern
-            for (int c = 0; c < dealPattern[dealPatternI]; c++) {
-                Card a = p.deal_one();
-                pArray[playerNum]->add_card(a);
-            }
-
-            //increment deal pattern
-            dealPatternI++;
-        }
-
-        //deal upcard
+        //call deal function
+        int dealer = deal_hand(argc,argv,p,hand,pArray);
         Card up_card = p.deal_one();
 
         //print upcard
         std::cout << up_card.get_rank() << " of " << up_card.get_suit() << " turned up" << std::endl;
-        
-        //loop through players to establish trump
+
+        //establish trump
         int count = 0;
         bool trump_ordered = false;
         std::string order_up_suit = " ";
         int order_up_player = 0;
-
-        //loop through players starting with player to the left of dealer
-        for (size_t i = dealer+1; i < dealer+9; i++) {
-            //get player number
-            int playerNum = i % 4;
-
-            //offer players chance to make upcard during first round
-            if (count < 4) {
-                trump_ordered = pArray[playerNum]->make_trump(up_card,playerNum==dealer,1,order_up_suit);
-                if (trump_ordered) {
-                    std::cout << pArray[playerNum]->get_name() << " orders up " << order_up_suit << std::endl;
-                    pArray[dealer]->add_and_discard(up_card);
-                    order_up_player = playerNum;
-                    break;
-                } else {
-                    std::cout << pArray[playerNum]->get_name() << " passes" << std::endl;
-                }
-            }  else if (count < 8) {
-                trump_ordered = pArray[playerNum]->make_trump(up_card,playerNum==dealer,2,order_up_suit);
-                if (trump_ordered) {
-                    std::cout << pArray[playerNum]->get_name() << " orders up " << order_up_suit << std::endl;
-                    order_up_player = playerNum;
-                    break;
-                }  else {
-                    std::cout << pArray[playerNum]->get_name() << " passes" << std::endl;
-                }
-            }
-            count ++;
-        }
-
+        make_trump(dealer,pArray,count,up_card,trump_ordered,order_up_player,order_up_suit);
         std::cout << std::endl;
-
-        //play 5 tricks
-        std::vector<int> team_tricks = play_tricks(dealer,pArray,order_up_suit);
-
-        //score hand
-        score_hand(team_one_score,team_two_score,pArray,team_tricks[0],team_tricks[1],order_up_player);
-
-        //print out points for each team
-        std::cout << pArray[0]->get_name() << " and " << pArray[2]->get_name() << " have " << team_one_score << " points" << std::endl;
-        std::cout << pArray[1]->get_name() << " and " << pArray[3]->get_name() << " have " << team_two_score << " points" << std::endl;
-
-        //delete p array
-        for (int i = 0; i < int(pArray.size()); ++i) {
-            delete pArray[i];
-        }
-
+        
+        //run hand
+        run_hand(team_one_score,team_two_score,pArray,order_up_player,dealer,order_up_suit);
         std::cout << std::endl;
     }
 }
