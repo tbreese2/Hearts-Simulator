@@ -1,9 +1,9 @@
-# Euchre Card Simulator 
-This framework is meant to provide well designed, statically typed, and fully commented classes to play the card game Euchre.
+# Hearts Card Game Simulator 
+This framework is meant to provide well designed, statically typed, and fully commented classes to play the card game Hearts.
 
 ## Provided features
 
-* AI Euchre playing algorithm.
+* AI Hearts playing algorithm.
 * Current score and hand tracking.
 * Customizable card highlights.
 
