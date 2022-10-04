@@ -1,5 +1,3 @@
-// Project UID 1d9f47bfc76643019cfbf037641defe1
-
 #include "Card.h"
 #include "unit_test_framework.h"
 #include <iostream>

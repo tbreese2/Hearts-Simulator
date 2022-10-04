@@ -1,4 +1,3 @@
-// Project UID 1d9f47bfc76643019cfbf037641defe1
 
 #include "Pack.h"
 #include "Card.h"
@@ -7,9 +6,6 @@
 #include <iostream>
 #include <fstream>
 using namespace std;
-
-// THESE TEST CASES ARE NOT VERY THOROUGH.
-// YOU NEED TO WRITE YOUR OWN COMPREHENSIVE TEST CASES IN Pack_tests.cpp
 
 static const int PACK_SIZE = 24;
 

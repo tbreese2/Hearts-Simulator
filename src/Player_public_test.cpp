@@ -1,21 +1,9 @@
-/* Player_public_test.cpp
- *
- * Unit tests for the Simple and Human Euchre players
- * Project UID 1d9f47bfc76643019cfbf037641defe1
- *
- * by Andrew DeOrio
- * awdeorio@umich.edu
- * 2021-03-12
- */
 
 #include "Player.h"
 #include "Card.h"
 #include "unit_test_framework.h"
 #include <sstream>
 using namespace std;
-
-// THESE TEST CASES WILL ONLY TELL YOU IF YOUR CODE COMPILES.
-// YOU NEED TO WRITE YOUR OWN COMPREHENSIVE TEST CASES IN Player_tests.cpp
 
 TEST(test_player_insertion) {
   // Create a Human player
