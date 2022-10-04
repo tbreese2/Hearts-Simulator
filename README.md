@@ -12,8 +12,3 @@ This framework is meant to provide well designed, statically typed, and fully co
 Can be built with any c++ compiler, run the command "make euchre"
 
 This software is licensed under MIT Open Licence
-
-## Games Made with CGF
-
-* [Hypnagonia](https://github.com/db0/hypnagonia)
-* [Fragment Forge](https://github.com/db0/Fragment-Forge)
